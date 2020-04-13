@@ -575,7 +575,7 @@ jQuery(document).ready(function($) {
                 
                 //Tell the player how much they have to draw
                 if (currentUser.id === nextUser.id) {
-                    GameRoom.logLocal("Draw " + nextPlayer.drawAmount + " card(s)!");
+                    GameRoom.logLocal("Compre " + nextPlayer.drawAmount + " carta(s)!");
                 }
                 
             }
@@ -608,7 +608,7 @@ jQuery(document).ready(function($) {
                 
                 //Only tell user to draw more if they have a draw amount >= 1 after removing current drawn
                 if (player.drawAmount - 1 >= 1) {
-                    GameRoom.logLocal("Draw " + (player.drawAmount - 1) + " card(s)!");
+                    GameRoom.logLocal("Compre " + (player.drawAmount - 1) + " carta(s)!");
                 }
             }
             

@@ -1,0 +1,64 @@
+.card {
+    background-size: cover !important;
+    background-position: center;
+    width: 139px;
+    height: 269px;
+    margin-right: 10px;
+}
+
+#playArea .card {
+    height: 140px !important;
+    width: 72px !important;
+}
+
+.card-selected {
+    border: 5px solid #000 !important;
+}
+
+.card-contamine {
+    background-image: url('../cards/1.jpg');
+    /* background-image: url(../cards/2.jpg); */
+    /* background-image: url(../cards/3.jpg); */
+    /* background-image: url(../cards/4.jpg); */
+}
+
+.card-prevention {
+    background-image: url('../cards/5.jpg');
+    /* background-image: url(../cards/6.jpg); */
+    /* background-image: url(../cards/7.jpg); */
+    /* background-image: url(../cards/8.jpg); */
+    /* background-image: url(../cards/9.jpg); */
+    /* background-image: url(../cards/10.jpg); */
+}
+
+.card-nope {
+    background-image: url('../cards/11.jpg');
+}
+
+.card-attack {
+    background-image: url('../cards/12.jpg');
+}
+
+.card-skip {
+    background-image: url('../cards/13.jpg');
+}
+
+.card-favor {
+    background-image: url('../cards/14.jpg');
+}
+
+.card-shuffle {
+    background-image: url('../cards/15.jpg');
+}
+
+.card-future {
+    background-image: url('../cards/16.jpg');
+}
+
+.card-regular {
+    background-image: url('../cards/17.jpg');
+    /* background-image: url(../cards/18.jpg); */
+    /* background-image: url(../cards/19.jpg); */
+    /* background-image: url(../cards/20.jpg); */
+    /* background-image: url(../cards/21.jpg); */
+}

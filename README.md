@@ -1,5 +1,5 @@
 <h1 align="center">🦠 Xô, Corona!</h1>
-<div align="center"><img src="./public/xo-corona.png" /></div>
+<div align="center"><img src="./public/icons/xo-corona.png" /></div>
 
 Uma versão de Exploding Kittens no contexto do Coronavírus feita com Nodejs + Express + Socket.io.
 

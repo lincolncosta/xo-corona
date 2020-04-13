@@ -15,8 +15,11 @@ Baseando-se nas regras originais (http://www.explodingkittens.com/how), o Xô Co
 * **Prevenção**: Salvará o jogador que a possuir caso o mesmo encontre uma carta de contaminação.
 * **Prever**: Mostrará ao jogador que a utilizou as primeiras 3 cartas no topo do deck. É uma ação que pode ser anulada pela carta de Cancelamento.
 
+### COLABORADORES
+
+| [<img src="https://avatars0.githubusercontent.com/u/26147019?s=460&v=4" width=115><br><sub>@tekpixo</sub>](https://github.com/tekpixo)(https://github.com/tekpixo) |
+| :---: |    
 
 ### CRÉDITOS
-http://www.explodingkittens.com/
-
-### COLABORADORES
+Jogo de cartas original: http://www.explodingkittens.com/
+Jogo base: https://github.com/Mikunj/Exploding-Ketchup

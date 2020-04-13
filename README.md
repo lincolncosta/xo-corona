@@ -14,6 +14,7 @@ Baseando-se nas regras originais (http://www.explodingkittens.com/how), o Xô Co
 * **Favor**: Pede uma carta para qualquer jogador escolhido.
 * **Prevenção**: Salvará o jogador que a possuir caso o mesmo encontre uma carta de contaminação.
 * **Prever**: Mostrará ao jogador que a utilizou as primeiras 3 cartas no topo do deck. É uma ação que pode ser anulada pela carta de Cancelamento.
+* **Pular**: Faz com que o jogador termine o seu turno sem precisar comprar uma carta do deck.
 
 ### COLABORADORES
 

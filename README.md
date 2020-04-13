@@ -21,5 +21,5 @@ Baseando-se nas regras originais (http://www.explodingkittens.com/how), o Xô Co
 | :---: |    
 
 ### CRÉDITOS
-Jogo de cartas original: http://www.explodingkittens.com/
-Jogo base: https://github.com/Mikunj/Exploding-Ketchup
+* Jogo de cartas original: http://www.explodingkittens.com/
+* Jogo base: https://github.com/Mikunj/Exploding-Ketchup

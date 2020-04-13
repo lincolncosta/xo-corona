@@ -15,14 +15,14 @@
     border: 5px solid #000 !important;
 }
 
-.card-contamine {
+.card-contaminação {
     background-image: url('../cards/1.jpg');
     /* background-image: url(../cards/2.jpg); */
     /* background-image: url(../cards/3.jpg); */
     /* background-image: url(../cards/4.jpg); */
 }
 
-.card-prevention {
+.card-prevenção {
     background-image: url('../cards/5.jpg');
     /* background-image: url(../cards/6.jpg); */
     /* background-image: url(../cards/7.jpg); */
@@ -31,15 +31,15 @@
     /* background-image: url(../cards/10.jpg); */
 }
 
-.card-nope {
+.card-cancelamento {
     background-image: url('../cards/11.jpg');
 }
 
-.card-attack {
+.card-ataque {
     background-image: url('../cards/12.jpg');
 }
 
-.card-skip {
+.card-pular {
     background-image: url('../cards/13.jpg');
 }
 
@@ -47,15 +47,15 @@
     background-image: url('../cards/14.jpg');
 }
 
-.card-shuffle {
+.card-embaralhar {
     background-image: url('../cards/15.jpg');
 }
 
-.card-future {
+.card-prever {
     background-image: url('../cards/16.jpg');
 }
 
-.card-regular {
+.card-coringa {
     background-image: url('../cards/17.jpg');
     /* background-image: url(../cards/18.jpg); */
     /* background-image: url(../cards/19.jpg); */

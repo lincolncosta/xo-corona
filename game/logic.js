@@ -707,7 +707,7 @@ module.exports = function(io, EK) {
                     game.discardPile.push(playedSet);
                     
                     //Don't send the set details if players have no nopes
-                    var replySet = playersHaveNope(game) ? playedSet : null;
+                    var replySet = playersHaveCancelamento(game) ? playedSet : null;
                     
                     //Notify players that cards were played
                     io.in(game.id).emit($.GAME.PLAYER.PLAY, {
@@ -720,13 +720,13 @@ module.exports = function(io, EK) {
                     
                     //Wait for nope requests
                     playedSet.nopePlayed = true;
-                    checkNopes(playedSet, data, socket, game);
+                    checkCancelamentos(playedSet, data, socket, game);
                 }
             }
         }); //End $.GAME.PLAYER.PLAY
         
         /**
-         * Nope a played set.
+         * Cancelamento a played set.
          * 
          * Request Data: {
          *   gameId: "gameId",
@@ -1004,7 +1004,7 @@ module.exports = function(io, EK) {
             var card = playedSet.cards[0];
             switch (card.type) {
                 case $.CARD.ATTACK:
-                    //Attack the next person that is alive
+                    //Ataque the next person that is alive
                     var nextPlayer = game.getNextAlive(game.cUserIndex);
 
                     //Set the draw amount to 0 so that we just end our turn without drawing anything
@@ -1073,7 +1073,7 @@ module.exports = function(io, EK) {
                     break;
 
                 case $.CARD.SHUFFLE:
-                    //Shuffle the deck
+                    //Embaralhar the deck
                     game.shuffleDeck();
                     break;
                 // case $.CARD.REVERSE:
@@ -1111,7 +1111,7 @@ module.exports = function(io, EK) {
      * @param {Object} socket The socket      
      * @param {Object} game The game    
      */
-    var checkNopes = function(playedSet, data, socket, game) {
+    var checkCancelamentos = function(playedSet, data, socket, game) {
         
         //Check if the set is pending
         var pending = EK.pendingSets[playedSet.id];
@@ -1121,7 +1121,7 @@ module.exports = function(io, EK) {
         }
         
         //Set the sets nopePlayed to false as no other player can nope
-        if (!playersHaveNope(game)) {     
+        if (!playersHaveCancelamento(game)) {     
             pending.set.nopePlayed = false;
         }
         
@@ -1129,7 +1129,7 @@ module.exports = function(io, EK) {
             //Poll the set
             EK.pendingSets[playedSet.id].set.nopePlayed = false;
             setTimeout(function() {
-                checkNopes(pending.set, data, socket, game);
+                checkCancelamentos(pending.set, data, socket, game);
             }, game.nopeTime);
         } else {
             
@@ -1147,7 +1147,7 @@ module.exports = function(io, EK) {
             if (pending.data && pending.data.gameId) {
                 io.in(pending.data.gameId).emit($.GAME.PLAYER.NOPE, {
                     set: pending.set,
-                    canNope: false
+                    canCancelamento: false
                 });
             }
             
@@ -1161,7 +1161,7 @@ module.exports = function(io, EK) {
      * @param   {Object} game The game
      * @returns {Boolean}  Whether any player has a nope
      */
-    var playersHaveNope = function(game) {
+    var playersHaveCancelamento = function(game) {
         //Check if any players have a nope
         for (var i = 0; i < game.players.length; i++) {
             var player = game.players[i];

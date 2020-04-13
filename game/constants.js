@@ -55,8 +55,8 @@ var $ = {
             DISCARDSELECT: 'playerDiscardSelect',
             STEAL: 'playerSteal',
             FAVOR: 'playerFavor',
-            FUTURE: 'playerFuture',
-            NOPE: 'playerNope'
+            FUTURE: 'playerPrever',
+            NOPE: 'playerCancelamento'
         },
         REMOVED: 'gameRemoved'
     },
@@ -67,15 +67,15 @@ var $ = {
     },
 
     CARD: {
-        ATTACK: 'Attack',
-        NOPE: 'Nope',
-        PREVENTION: 'Prevention',
-        INFECTION: 'Infection',
-        SKIP: 'Skip',
-        FUTURE: 'Future',
+        ATTACK: 'Ataque',
+        NOPE: 'Cancelamento',
+        PREVENTION: 'Prevenção',
+        INFECTION: 'Contaminação',
+        SKIP: 'Pular',
+        FUTURE: 'Prever',
         FAVOR: 'Favor',
-        SHUFFLE: 'Shuffle',
-        REGULAR: 'Regular',
+        SHUFFLE: 'Embaralhar',
+        REGULAR: 'Coringa',
         REVERSE: 'Reverse'
     },
     

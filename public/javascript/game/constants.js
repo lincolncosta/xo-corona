@@ -61,8 +61,8 @@ var $C = {
             PLAY: 'playerPlayCard',
             STEAL: 'playerSteal',
             FAVOR: 'playerFavor',
-            FUTURE: 'playerFuture',
-            NOPE: 'playerNope'
+            FUTURE: 'playerPrever',
+            NOPE: 'playerCancelamento'
         },
         REMOVED: 'gameRemoved'
     },
@@ -73,15 +73,15 @@ var $C = {
     },
 
     CARD: {
-        ATTACK: 'Attack',
-        NOPE: 'Nope',
+        ATTACK: 'Ataque',
+        NOPE: 'Cancelamento',
         PREVENT: 'Contamine',
         CONTAMINE: 'Contamine',
-        SKIP: 'Skip',
-        FUTURE: 'Future',
+        SKIP: 'Pular',
+        FUTURE: 'Prever',
         FAVOR: 'Favor',
-        SHUFFLE: 'Shuffle',
-        REGULAR: 'Regular',
+        SHUFFLE: 'Embaralhar',
+        REGULAR: 'Coringa',
         REVERSE: 'Reverse'
     },
     

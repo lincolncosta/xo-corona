@@ -202,20 +202,20 @@ Game.prototype.start = function () {
     //Give each player a diffuse and 4 random card from the pile
     for (var key in this.players) {
         var player = this.players[key];
-        player.addCard(new Card(this.generateRandomID(), 'Prevention', $.CARD.PREVENTION, 'a'));
+        player.addCard(new Card(this.generateRandomID(), 'Prevenção', $.CARD.PREVENTION, 'a'));
         this.drawCards(player, 4);
     }
     
     //Add in bombs
     for (var i = 0; i < this.players.length - 1; i ++) {
-        this.drawPile.push(new Card(this.generateRandomID(), 'Infection', $.CARD.INFECTION, 0));
+        this.drawPile.push(new Card(this.generateRandomID(), 'Contaminação', $.CARD.INFECTION, 0));
     }
     
     //Add in extra defuses to negate the lack of nopes
     var multiplier = (this.players.length > 5) ? 2 : 1;
     var count = (6 * multiplier) - this.players.length;
     for (var i = 0; i < count; i++) {
-        this.drawPile.push(new Card(this.generateRandomID(), 'Prevention', $.CARD.PREVENTION, 0));
+        this.drawPile.push(new Card(this.generateRandomID(), 'Prevenção', $.CARD.PREVENTION, 0));
     }
     
     this.shuffleDeck();
@@ -362,12 +362,12 @@ Game.prototype.reset = function (){
 Game.prototype.resetDeck = function() {
     /*
     A deck consists of:
-    4 Attack cards
-    4 Skip cards
+    4 Ataque cards
+    4 Pular cards
     4 Favor cards
-    4 Shuffle cards
-    5 Future cards
-    4 x 5 Regular cards
+    4 Embaralhar cards
+    5 Prever cards
+    4 x 5 Coringa cards
     More than 5 players then deck size doubles
     */
     
@@ -379,17 +379,17 @@ Game.prototype.resetDeck = function() {
     for (var i = 0; i < 5 * multiplier; i++) {
         if (i < 4 * multiplier) {
             //Special
-            this.drawPile.push(new Card(this.generateRandomID(), 'Attack', $.CARD.ATTACK, 0));
-            this.drawPile.push(new Card(this.generateRandomID(), 'Skip', $.CARD.SKIP, 1));
+            this.drawPile.push(new Card(this.generateRandomID(), 'Ataque', $.CARD.ATTACK, 0));
+            this.drawPile.push(new Card(this.generateRandomID(), 'Pular', $.CARD.SKIP, 1));
             this.drawPile.push(new Card(this.generateRandomID(), 'Favor', $.CARD.FAVOR, 2));
-            this.drawPile.push(new Card(this.generateRandomID(), 'Shuffle', $.CARD.SHUFFLE, 3));
+            this.drawPile.push(new Card(this.generateRandomID(), 'Embaralhar', $.CARD.SHUFFLE, 3));
             
             //Only add the reverse if we have more than 2 players since with 2 people order doesn't matter
             // if (this.players.length > 2) {
             //     this.drawPile.push(new Card(this.generateRandomID(), 'Reverse', $.CARD.REVERSE, 3));
             // }
             
-            //Regular
+            //Coringa
             this.drawPile.push(new Card(this.generateRandomID(), 'Álcool gel 70°', $.CARD.REGULAR, 4));
             this.drawPile.push(new Card(this.generateRandomID(), 'Lenços umidecidos', $.CARD.REGULAR, 5));
             this.drawPile.push(new Card(this.generateRandomID(), 'Máscara', $.CARD.REGULAR, 6));
@@ -397,13 +397,13 @@ Game.prototype.resetDeck = function() {
             this.drawPile.push(new Card(this.generateRandomID(), 'Água limpa e sabão', $.CARD.REGULAR, 8));
         }
         
-        this.drawPile.push(new Card(this.generateRandomID(), 'Future', $.CARD.FUTURE, 9));
-        this.drawPile.push(new Card(this.generateRandomID(), 'Nope', $.CARD.NOPE, 3));
+        this.drawPile.push(new Card(this.generateRandomID(), 'Prever', $.CARD.FUTURE, 9));
+        this.drawPile.push(new Card(this.generateRandomID(), 'Cancelamento', $.CARD.NOPE, 3));
     }
 }
 
 /**
- * Shuffle the deck of cards
+ * Embaralhar the deck of cards
  * @returns {Object} The shuffled deck
  */
 Game.prototype.shuffleDeck = function() {
@@ -473,8 +473,8 @@ Game.prototype.getLastDiscardSet = function() {
     var last = null;
     for (var i = this.discardPile.length - 1; i >= 0; i--) {
         var set = this.discardPile[i];
-        var hasNope = set.cards.length == 1 && set.hasCardType($.CARD.NOPE);
-        if (!hasNope) {
+        var hasCancelamento = set.cards.length == 1 && set.hasCardType($.CARD.NOPE);
+        if (!hasCancelamento) {
             last = set;
             break;
         }

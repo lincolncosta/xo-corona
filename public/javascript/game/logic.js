@@ -548,14 +548,14 @@ jQuery(document).ready(function($) {
             var message = null;
             switch (data.state) {
                 case $C.GAME.PLAYER.TURN.PREVENTED:
-                    message = user.name + " está previnido!";
+                    message = user.name + " se previniu!";
                     break;
                 case $C.GAME.PLAYER.TURN.CONTAMINED:
                     message = user.name + " foi contaminado!";
                     break;
-                case $C.GAME.PLAYER.TURN.SURVIVED:
-                    message = user.name + " sobreviveu ao seu turno.";
-                    break;
+                // case $C.GAME.PLAYER.TURN.SURVIVED:
+                //     message = user.name + " sobreviveu ao seu turno.";
+                //     break;
             }
             
             //Send the state message to user
@@ -570,7 +570,7 @@ jQuery(document).ready(function($) {
                 var currentUser = main.getCurrentUser();
                 
                 //The turn message
-                var turnMessage = (currentUser.id === nextUser.id) ? "It is your turn!" : "It is " + nextUser.name + "'s turn!";
+                var turnMessage = (currentUser.id === nextUser.id) ? "É o seu turno!" : "É a vez de " + nextUser.name + "!";
                 GameRoom.logSystem(turnMessage);
                 
                 //Tell the player how much they have to draw
@@ -594,9 +594,8 @@ jQuery(document).ready(function($) {
 
             //Tell the user what cards they drew
             if (data.cards) {
-                var type = "";
                 $.each(data.cards, function(index, card) {
-                    GameRoom.logLocal("You drew a " + card.name + ".");
+                    GameRoom.logLocal("Você pegou uma carta " + card.name + ".");
                 });
             }
             
@@ -613,7 +612,7 @@ jQuery(document).ready(function($) {
             }
             
         } else {
-            GameRoom.logSystem(data.player.user.name + " drew a card.");
+            GameRoom.logSystem(data.player.user.name + " comprou uma carta.");
         }
     });
     
@@ -634,15 +633,15 @@ jQuery(document).ready(function($) {
                 cardString = cardString.slice(0, -2);
                 
                 //Build the string to show to user
-                var playString = (cards.length <= 1) ? " played a " : " played ";
+                var playString = (cards.length <= 1) ? " jogou uma " : " jogou ";
                 var suffix = ".";
                 if (data.to) {
                     var other = main.users[data.to];
                     var otherString = (other.id === main.getCurrentUser().id) ? "You" : other.name;
-                    suffix = " targetting " + otherString + ".";
+                    suffix = " em " + otherString + ".";
                 }
                 
-                GameRoom.logSystemGreen(user.name + playString + cardString + " card(s)" + suffix);
+                GameRoom.logSystemGreen(user.name + playString + " carta(s)" + cardString + suffix);
             }
             
             //Update game
@@ -658,7 +657,7 @@ jQuery(document).ready(function($) {
                 main.gameData.currentPlayedSet = data.set;
                 //GameRoom.update(main);
                 GameRoom.logSystem("Um jogador pode jogar uma carta de cancelamento!");
-                startNopeTimer(game.nopeTime);
+                startCancelamentoTimer(game.nopeTime);
             }
             
             //Get hand
@@ -674,7 +673,7 @@ jQuery(document).ready(function($) {
     io.on($C.GAME.PLAYER.NOPE, function(data) {
         if (data.hasOwnProperty('error')) {
             GameRoom.logError(data.error);
-        } else if (data.hasOwnProperty('canNope')) {
+        } else if (data.hasOwnProperty('canCancelamento')) {
             if (main.gameData.currentPlayedSet) {                
                 GameRoom.logSystem("Não é possível jogar mais cartas de cancelamento!");
             }
@@ -709,7 +708,7 @@ jQuery(document).ready(function($) {
             }
             
             //Start the timer again
-            startNopeTimer(game.nopeTime);
+            startCancelamentoTimer(game.nopeTime);
             
             //Get the discard pile
             io.emit($C.GAME.DISCARDPILE, { gameId: game.id }); 
@@ -831,10 +830,10 @@ jQuery(document).ready(function($) {
      * Start an x second timer on the nope button
      * @param {Number} time The time in milliseconds
      */
-    var startNopeTimer = function(time) {
+    var startCancelamentoTimer = function(time) {
         //Add a timer to the nope
         $('#nopeGameButton').attr('data-count', Math.floor(time / 1000));
-        updateNopeButton();
+        updateCancelamentoButton();
         if ($('#nopeGameButton').attr('data-timer-started') == 1) return;
         
         var interval = setInterval(function() {
@@ -845,7 +844,7 @@ jQuery(document).ready(function($) {
             count --;
             button.attr('data-count', count);
             
-            updateNopeButton(interval);
+            updateCancelamentoButton(interval);
         }, 1000);
     }
     
@@ -853,20 +852,20 @@ jQuery(document).ready(function($) {
      * Update nope button with the interval
      * @param {Object} interval The interval
      */
-    var updateNopeButton = function(interval) {
+    var updateCancelamentoButton = function(interval) {
         var button = $('#nopeGameButton');
         var count = button.attr('data-count');
         
         if (count < 0) {
             //Update nope button timer
-            button.text('Nope');
+            button.text('Cancelamento');
             button.attr('data-count', 0);
             button.attr('data-timer-started', 0);
             if (interval) {
                 clearInterval(interval);
             }
         } else {
-            button.text('Nope (' + count + ')');
+            button.text('Cancelamento (' + count + ')');
             GameRoom.logLocal(count + ' seconds to nope!');
         }
     }

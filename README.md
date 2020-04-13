@@ -17,7 +17,7 @@ Baseando-se nas regras originais (http://www.explodingkittens.com/how), o Xô Co
 
 ### COLABORADORES
 
-| [<img src="https://avatars0.githubusercontent.com/u/26147019?s=460&v=4" width=115><br><sub>@tekpixo</sub>](https://github.com/tekpixo)(https://github.com/tekpixo) |
+| [<img src="https://avatars0.githubusercontent.com/u/26147019?s=460&v=4" width=115><br><sub>@tekpixo</sub>](https://github.com/tekpixo) |
 | :---: |    
 
 ### CRÉDITOS

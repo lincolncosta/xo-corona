@@ -14,12 +14,13 @@ Baseando-se nas regras originais (http://www.explodingkittens.com/how), o Xô Co
 * **Favor**: Pede uma carta para qualquer jogador escolhido.
 * **Prevenção**: Salvará o jogador que a possuir caso o mesmo encontre uma carta de contaminação.
 * **Prever**: Mostrará ao jogador que a utilizou as primeiras 3 cartas no topo do deck. É uma ação que pode ser anulada pela carta de Cancelamento.
+* **Pular**: Faz com que o jogador termine o seu turno sem precisar comprar uma carta do deck.
 
 ### COLABORADORES
 
-| [<img src="https://avatars0.githubusercontent.com/u/26147019?s=460&v=4" width=115><br><sub>@tekpixo</sub>](https://github.com/tekpixo)(https://github.com/tekpixo) |
+| [<img src="https://avatars0.githubusercontent.com/u/26147019?s=460&v=4" width=115><br><sub>@tekpixo</sub>](https://github.com/tekpixo) |
 | :---: |    
 
 ### CRÉDITOS
-Jogo de cartas original: http://www.explodingkittens.com/
-Jogo base: https://github.com/Mikunj/Exploding-Ketchup
+* Jogo de cartas original: http://www.explodingkittens.com/
+* Jogo base: https://github.com/Mikunj/Exploding-Ketchup

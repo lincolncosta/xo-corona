@@ -272,7 +272,7 @@ var GameRoom = {
         element.empty();
         
         $.each(cards, function(index, card) {
-            var html = "<div data-selected='false' data-id='" + card.id +"' class='card noselect card-" + card.type.toLowerCase() +"'></div>";
+            var html = "<div data-selected='false' data-id='" + card.id +"' class='card noselect card-" + card.type.toLowerCase() +" image-" + card.name.toLowerCase() +"'></div>";
             
             element.append(html);
             

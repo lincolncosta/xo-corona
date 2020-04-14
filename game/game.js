@@ -390,11 +390,11 @@ Game.prototype.resetDeck = function() {
             // }
             
             //Coringa
-            this.drawPile.push(new Card(this.generateRandomID(), 'Álcool gel 70°', $.CARD.REGULAR, 4));
-            this.drawPile.push(new Card(this.generateRandomID(), 'Lenços umidecidos', $.CARD.REGULAR, 5));
-            this.drawPile.push(new Card(this.generateRandomID(), 'Máscara', $.CARD.REGULAR, 6));
-            this.drawPile.push(new Card(this.generateRandomID(), 'Lenços de papel', $.CARD.REGULAR, 7));
-            this.drawPile.push(new Card(this.generateRandomID(), 'Água limpa e sabão', $.CARD.REGULAR, 8));
+            this.drawPile.push(new Card(this.generateRandomID(), 'alcool', $.CARD.REGULAR, 4));
+            this.drawPile.push(new Card(this.generateRandomID(), 'lenços-umidecidos', $.CARD.REGULAR, 5));
+            this.drawPile.push(new Card(this.generateRandomID(), 'mascara', $.CARD.REGULAR, 6));
+            this.drawPile.push(new Card(this.generateRandomID(), 'lenços-papel', $.CARD.REGULAR, 7));
+            this.drawPile.push(new Card(this.generateRandomID(), 'agua', $.CARD.REGULAR, 8));
         }
         
         this.drawPile.push(new Card(this.generateRandomID(), 'Prever', $.CARD.FUTURE, 9));

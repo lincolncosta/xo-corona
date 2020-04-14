@@ -55,10 +55,22 @@
     background-image: url('../cards/16.jpg');
 }
 
-.card-coringa {
+.image-lenços-umidecidos {
     background-image: url('../cards/17.jpg');
-    /* background-image: url(../cards/18.jpg); */
-    /* background-image: url(../cards/19.jpg); */
-    /* background-image: url(../cards/20.jpg); */
-    /* background-image: url(../cards/21.jpg); */
+}
+
+.image-alcool {
+    background-image: url('../cards/18.jpg');
+}
+
+.image-mascara {
+    background-image: url('../cards/19.jpg');
+}
+
+.image-lenços-papel {
+    background-image: url('../cards/20.jpg');
+}
+
+.image-agua {
+    background-image: url('../cards/21.jpg');
 }

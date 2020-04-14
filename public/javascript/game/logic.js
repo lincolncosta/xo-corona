@@ -738,20 +738,20 @@ jQuery(document).ready(function($) {
                 
                 //Tell the players involved what they lost or gained
                 if (currentUser.id === from.id) {
-                    GameRoom.logLocal("Você pegou uma " + data.card.name+ ".");
+                    GameRoom.logLocal("Você pegou uma carta de " + data.card.name+ ".");
                 }
                 
                 if (currentUser.id === to.id) {
-                    GameRoom.logLocal("Você perdeu uma " + data.card.name+ ".");
+                    GameRoom.logLocal("Você perdeu uma carta de " + data.card.name+ ".");
                 }
                 
                 break;
             case $C.CARDSET.STEAL.NAMED:
                 //Use logLocal so that the card taking stands out
                 if (data.success) {
-                    GameRoom.logSystemGreen(fromString + " took a " + data.cardType + " from " + toString+ ".");
+                    GameRoom.logSystemGreen(fromString + " pegou uma carta de " + data.cardType + " de " + toString+ ".");
                 } else {
-                    GameRoom.logSystemGreen(fromString + " failed to take a " + data.cardType + " from " + toString+ ".");
+                    GameRoom.logSystemGreen(fromString + " falhou ao pegar uma carta de " + data.cardType + " de " + toString+ ".");
                 }
                 break;
             case $C.CARDSET.STEAL.DISCARD:
@@ -782,8 +782,8 @@ jQuery(document).ready(function($) {
             var currentUser = main.getCurrentUser();
             var from = main.users[data.from.id];
             var to = main.users[data.to.id];
-            var fromString = (currentUser.id === from.id) ? "You" : from.name;
-            var toString = (currentUser.id === to.id) ? "You" : to.name;
+            var fromString = (currentUser.id === from.id) ? "Você" : from.name;
+            var toString = (currentUser.id === to.id) ? "Você" : to.name;
 
             if (data.hasOwnProperty('force')) {
                 GameRoom.logSystemGreen(fromString + " pediu a " + toString + " um favor.");
@@ -802,7 +802,7 @@ jQuery(document).ready(function($) {
                 }
 
             } else if (data.hasOwnProperty('success')) {
-                GameRoom.logSystemGreen(fromString + " gave " + toString + " a " + data.card.name + ".");
+                GameRoom.logSystemGreen(fromString + " deu uma carta de " + data.card.name + " para " + toString + ".");
 
                 if (currentUser.id === to.id) {
                     //From user did current user a favor
@@ -866,7 +866,7 @@ jQuery(document).ready(function($) {
             }
         } else {
             button.text('Cancelamento (' + count + ')');
-            GameRoom.logLocal(count + ' seconds to nope!');
+            GameRoom.logLocal(count + ' segundos para cancelamento!');
         }
     }
     

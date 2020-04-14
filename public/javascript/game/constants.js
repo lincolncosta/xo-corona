@@ -1,5 +1,5 @@
 /**
-  Exloding Covid. 
+  Xô Corona. 
   Covid-19 take place in the Exploding Kittens game.
   Copyright (C) 2020 Lincoln Costa
 

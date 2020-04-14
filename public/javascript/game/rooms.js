@@ -387,7 +387,7 @@ var GameRoom = {
         if (to) {
             var user = EK.users[to];
             if (user) {
-                $('#favorWaitPopup #text').text('Wait for a favor from ' + user.name + '.');
+                $('#favorWaitPopup #text').text('Aguarde um favor de ' + user.name + '.');
             }
         }
     },

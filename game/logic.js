@@ -590,14 +590,14 @@ module.exports = function(io, EK) {
                     if (cards.length == 1) {
                         if (cards[0].type === $.CARD.PREVENTION || cards[0].type === $.CARD.REGULAR || cards[0].type === $.CARD.NOPE) {
                             socket.emit($.GAME.PLAYER.PLAY, {
-                                error: 'Cannot play defuse, regular or nope cards alone!'
+                                error: 'Não é possível jogar cartas de Prevenção, Coringa ou Cancelamento sozinhas!'
                             });
                             return;
                         }
                         
                         if (cards[0].type === $.CARD.INFECTION) {
                             socket.emit($.GAME.PLAYER.PLAY, {
-                                error: 'Cannot play explode! How the heck did you even get it?'
+                                error: 'Não é possível jogar Contaminação! E como você conseguiu essa carta, malandro(a)?'
                             });
                             return;
                         }

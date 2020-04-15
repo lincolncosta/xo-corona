@@ -1,12 +1,42 @@
 <h1 align="center">🦠 Xô, Corona!</h1>
 <div align="center"><img src="./public/icons/xo-corona.png" /></div>
 
-Uma versão de Exploding Kittens no contexto do Coronavírus feita com Nodejs + Express + Socket.io.
+Uma versão de Exploding Kittens no contexto do covid-19 feita com Nodejs + Express + Socket.io.
 
-### REGRAS
+## REGRAS
 Baseando-se nas regras originais (http://www.explodingkittens.com/how), o Xô Corona funciona da seguinte maneira:
 
-#### Efeitos das cartas
+### COMO FUNCIONA
+
+Há algumas cartas de Contaminação (covid-19) no meio do baralho. Os jogadores se revezam comprando cartas do baralho virado para baixo até que alguém compre uma Contaminação. Quando isso acontecer, a pessoa é infectada e é eliminada do jogo. Isso continua até que tenha somente 1 jogador, que será o vencedor. Quanto mais cartas você comprar, mais chances tem de comprar uma Contaminação.
+
+**RESUMINDO**
+
+Se você for contaminado, você perde.
+Se você não for contaminado, você vence.
+E todas as outras cartas do baralho vão ajudar você a não ser eliminado pela contaminação.
+
+### PREPARAÇÃO
+
+No início de cada partida todos os jogadores recebem 5 cartas e o deck é embaralhado. Conforme dito anteriormente, você precisa evitar cartas de Contaminação, porém caso compre uma e possua uma carta de Prevenção, a Contaminação retornará para a Pilha de Compra em um local aleatório. Para começar, escolha um jogador para o primeiro turno (pode ser um critério simples: aquele que tiver a barba mais legal, o odor mais intimidador, o dedão mais comprido, etc).
+
+### NA SUA VEZ DE JOGAR
+
+Olhe para todas as cartas na sua mão e faça uma das seguintes ações:
+
+**PASSE A VEZ** ao não jogar nenhuma carta e comprar uma carta da Pilha de Compra **OU JOGUE** descartando uma carta VIRADA PARA CIMA e seguindo as instruções dela. Após aplicar o efeito da carta, terminar o seu turno ou jogar outra carta. Jogue quantas cartas quiser. **SEMPRE** termine o seu turno comprando a carta do topo da Pilha de Compra. Torça para não pegar uma Contaminação! __Xô Corona é diferente da maioria dos jogos onde você COMEÇA O SEU TURNO ao comprar uma carta.__
+
+### FIM DO JOGO
+
+Vence o jogo o último jogador que não for infectado. As cartas na Pilha de Compra nunca vão acabar porque sempre existirão cartas de Contaminação suficientes para infectar todos os jogadores, exceto um.
+
+### MAIS ALGUMAS COISINHAS
+
+* É uma boa estratégia guardar as suas cartas no início da partida, enquanto as suas chances de explodir são mais baixas.
+* É possível contar as cartas que ainda restam na Pilha de Compra para saber a probabilidade de você explodir.
+* Não há um máximo e nem um mínimo de cartas que você pode ter na mão. Se as cartas da sua mão acabarem, não há nenhuma ação especial a ser feita. Continue jogando. Você comprará pelo menos mais 1 carta na sua próxima rodada.
+
+### EFEITOS DAS CARTAS
 * **Ataque**: Faz com que o próximo jogador compre uma carta extra durante a sua rodada e isenta o aplicante do efeito de comprar uma carta ao final do turno.
 * **Cancelamento**: Cancela o efeito da última carta jogada. Sempre que for possível utilizá-la, a interface exibirá um botão de ação.
 * **Contaminação**: Infectará o jogador que encontrar a carta a menos que o mesmo possua uma carta de Prevenção.
@@ -15,7 +45,9 @@ Baseando-se nas regras originais (http://www.explodingkittens.com/how), o Xô Co
 * **Favor**: Pede uma carta para qualquer jogador escolhido, a carta dada será de escolha do mesmo. É uma ação que pode ser anulada pela carta de Cancelamento.
 * **Prevenção**: Salvará o jogador que a possuir caso o mesmo encontre uma carta de contaminação.
 * **Prever**: Mostrará ao jogador que a utilizou as primeiras 3 cartas no topo do deck. É uma ação que pode ser anulada pela carta de Cancelamento.
-* **Pular**: Faz com que o jogador termine o seu turno sem precisar comprar uma carta do deck.
+* **Pular**: Faz com que o jogador termine o seu turno sem precisar comprar uma carta do deck. É uma ação que pode ser anulada pela carta de Cancelamento.
+
+**AGORA PARE DE LER E VÁ JOGAR!**
 
 ### COLABORADORES
 

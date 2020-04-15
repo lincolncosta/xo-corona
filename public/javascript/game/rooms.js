@@ -323,7 +323,7 @@ var GameRoom = {
             });
 
             //Set the user count
-            $('#playerList .top-bar').text('Jogadores conectados ( ' + game.players.length + ' )');
+            $('#playerList .top-bar').text('Jogadores conectados (' + game.players.length + ')');
 
         }
     },

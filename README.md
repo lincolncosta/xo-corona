@@ -56,7 +56,7 @@ Vence o jogo o último jogador que não for infectado. As cartas na Pilha de Com
 * **Prever**: Mostrará ao jogador que a utilizou as primeiras 3 cartas no topo do deck. É uma ação que pode ser anulada pela carta de Cancelamento.
 * **Pular**: Faz com que o jogador termine o seu turno sem precisar comprar uma carta do deck. É uma ação que pode ser anulada pela carta de Cancelamento.
 
-<h1>**AGORA PARE DE LER E VÁ JOGAR!**</h1>
+<h1 align="center">**AGORA PARE DE LER E VÁ JOGAR!**</h1>
 
 ### COLABORADORES
 

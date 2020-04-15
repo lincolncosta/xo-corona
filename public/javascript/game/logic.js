@@ -575,7 +575,7 @@ jQuery(document).ready(function ($) {
 
                 //Tell the player how much they have to draw
                 if (currentUser.id === nextUser.id) {
-                    GameRoom.logLocal("Compre " + nextPlayer.drawAmount + " carta(s)!");
+                    GameRoom.logLocal("Faça a sua jogada e depois compre " + nextPlayer.drawAmount + " carta(s)!");
                 }
 
             }
@@ -607,7 +607,7 @@ jQuery(document).ready(function ($) {
 
                 //Only tell user to draw more if they have a draw amount >= 1 after removing current drawn
                 if (player.drawAmount - 1 >= 1) {
-                    GameRoom.logLocal("Compre " + (player.drawAmount - 1) + " carta(s)!");
+                    GameRoom.logLocal("Faça a sua jogada e depois compre " + (player.drawAmount - 1) + " carta(s)!");
                 }
             }
 
@@ -637,11 +637,11 @@ jQuery(document).ready(function ($) {
                 var suffix = ".";
                 if (data.to) {
                     var other = main.users[data.to];
-                    var otherString = (other.id === main.getCurrentUser().id) ? "You" : other.name;
+                    var otherString = (other.id === main.getCurrentUser().id) ? "você" : other.name;
                     suffix = " em " + otherString + ".";
                 }
 
-                GameRoom.logSystemGreen(user.name + playString + " carta(s)" + cardString + suffix);
+                GameRoom.logSystemGreen(user.name + playString + " carta(s) " + cardString + suffix);
             }
 
             //Update game

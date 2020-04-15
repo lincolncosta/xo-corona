@@ -1,5 +1,20 @@
 <h1 align="center">🦠 Xô, Corona!</h1>
-<div align="center"><img src="./public/icons/xo-corona.png" /></div>
+
+<div align="center">
+  <img width="125" src="./public/cards/1.jpg" />
+  <img width="125" src="./public/cards/5.jpg" />
+  <img width="125" src="./public/cards/11.jpg" />
+  <img width="125" src="./public/cards/12.jpg" />
+  <img width="125" src="./public/cards/13.jpg" />
+  <img width="125" src="./public/cards/14.jpg" />
+  <img width="125" src="./public/cards/15.jpg" />
+  <img width="125" src="./public/cards/16.jpg" />
+  <img width="125" src="./public/cards/17.jpg" />
+  <img width="125" src="./public/cards/18.jpg" />
+  <img width="125" src="./public/cards/19.jpg" />
+  <img width="125" src="./public/cards/20.jpg" />
+  <img width="125" src="./public/cards/21.jpg" />
+</div>
 
 Uma versão de Exploding Kittens no contexto do covid-19 feita com Nodejs + Express + Socket.io.
 

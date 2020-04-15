@@ -16,8 +16,6 @@
   <img width="125" src="./public/cards/21.jpg" />
 </div>
 
-Uma versão de Exploding Kittens no contexto do covid-19 feita com Nodejs + Express + Socket.io.
-
 ## REGRAS
 Baseando-se nas regras originais (http://www.explodingkittens.com/how), o Xô Corona funciona da seguinte maneira:
 
@@ -25,11 +23,7 @@ Baseando-se nas regras originais (http://www.explodingkittens.com/how), o Xô Co
 
 Há algumas cartas de Contaminação (covid-19) no meio do baralho. Os jogadores se revezam comprando cartas do baralho virado para baixo até que alguém compre uma Contaminação. Quando isso acontecer, a pessoa é infectada e é eliminada do jogo. Isso continua até que tenha somente 1 jogador, que será o vencedor. Quanto mais cartas você comprar, mais chances tem de comprar uma Contaminação.
 
-**RESUMINDO**
-
-Se você for contaminado, você perde.
-Se você não for contaminado, você vence.
-E todas as outras cartas do baralho vão ajudar você a não ser eliminado pela contaminação.
+**RESUMINDO**: Se você for contaminado, você perde. Se você não for contaminado, você vence. E todas as outras cartas do baralho vão ajudar você a não ser eliminado pela contaminação.
 
 ### PREPARAÇÃO
 
@@ -62,7 +56,7 @@ Vence o jogo o último jogador que não for infectado. As cartas na Pilha de Com
 * **Prever**: Mostrará ao jogador que a utilizou as primeiras 3 cartas no topo do deck. É uma ação que pode ser anulada pela carta de Cancelamento.
 * **Pular**: Faz com que o jogador termine o seu turno sem precisar comprar uma carta do deck. É uma ação que pode ser anulada pela carta de Cancelamento.
 
-**AGORA PARE DE LER E VÁ JOGAR!**
+<h1>**AGORA PARE DE LER E VÁ JOGAR!**</h1>
 
 ### COLABORADORES
 

@@ -82,7 +82,8 @@ var $C = {
         FAVOR: 'Favor',
         SHUFFLE: 'Embaralhar',
         REGULAR: 'Coringa',
-        REVERSE: 'Reverse'
+        REVERSE: 'Reverse',
+        CHANGE: 'Troca-troca'
     },
     
     CARDSET: {

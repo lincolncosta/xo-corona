@@ -105,6 +105,8 @@ jQuery(document).ready(function ($) {
                 var card = main.gameData.getCardFromHand(cards.data('id'));
                 if (card.type === $C.CARD.FAVOR) {
                     GameRoom.showFavorSelectOverlay(main);
+                } else if (card.type === $C.CARD.CHANGE) {
+                    GameRoom.showChangeAllOverlay(main);
                 } else {
                     io.emit($C.GAME.PLAYER.PLAY, {
                         gameId: main.getCurrentUserGame().id,
@@ -193,6 +195,18 @@ jQuery(document).ready(function ($) {
 
             GameRoom.hideOverlay();
         }
+
+    });
+
+    $('#changeAllButton').bind('click touchstart', function (e) {
+        e.preventDefault();
+        var cards = $("#playingInput .card[data-selected='true']");
+        var to = $('#changeAllPopup #player-select').val();
+        var game = main.getCurrentUserGame();
+
+        console.log(cards);
+        console.log(to);
+        console.log(game);
 
     });
 

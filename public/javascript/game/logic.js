@@ -201,13 +201,24 @@ jQuery(document).ready(function ($) {
     $('#changeAllButton').bind('click touchstart', function (e) {
         e.preventDefault();
         var cards = $("#playingInput .card[data-selected='true']");
-        var to = $('#changeAllPopup #player-select').val();
         var game = main.getCurrentUserGame();
+        var to = $('#changeAllPopup #player-select').val();
+        var from = game.getCurrentPlayer();
 
-        console.log(cards);
-        console.log(to);
-        console.log(game);
+        if (cards.length > 0 && to && game) {
 
+            io.emit($C.GAME.PLAYER.CHANGE, {
+                gameId: game.id,
+                to: to
+            })
+
+            console.log(cardIdsFromDOMData(cards));
+            console.log(to);
+            console.log(from);
+            console.log(game);
+
+            GameRoom.hideOverlay();
+        }
     });
 
     $('#namedStealButton').bind('click touchstart', function (e) {

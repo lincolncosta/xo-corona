@@ -37,6 +37,10 @@ var Player = function(user) {
     
 };
 
+Player.prototype.getHand = function () {
+    return this.hand;
+}
+
 /**
  * Reset the player
  */

@@ -62,7 +62,8 @@ var $C = {
             STEAL: 'playerSteal',
             FAVOR: 'playerFavor',
             FUTURE: 'playerPrever',
-            NOPE: 'playerCancelamento'
+            NOPE: 'playerCancelamento',
+            CHANGE: 'playerTrocaTroca'
         },
         REMOVED: 'gameRemoved'
     },

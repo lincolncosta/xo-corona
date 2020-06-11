@@ -488,7 +488,7 @@ module.exports = function (io, EK) {
                     //Use while loop incase player picks up 2 explodes
                     while (player.hasCardType($.CARD.INFECTION)) {
                         if (player.hasCardType($.CARD.PREVENTION)) {
-                            //Remove deufse and add it to the discard pile
+                            //Remove defuse and add it to the discard pile
                             var defuse = player.removeCardType($.CARD.PREVENTION);
                             var set = new CardSet(player, [defuse]);
                             set.effectPlayed = true;
@@ -542,8 +542,12 @@ module.exports = function (io, EK) {
             var game = EK.gameList[data.gameId];
 
             if (game && game.status == $.GAME.STATUS.PLAYING) {
+
                 var user = EK.connectedUsers[socket.id];
                 var player = game.getPlayer(user);
+
+                var other = EK.connectedUsers[data.to];
+                var otherPlayer = game.getPlayer(other);
 
                 //Check if we have right player
                 if (!data.hasOwnProperty('to') || !EK.connectedUsers[data.to] || !game.getPlayer(EK.connectedUsers[data.to])) {
@@ -553,11 +557,28 @@ module.exports = function (io, EK) {
                     return;
                 }
 
-                auxHand = to.hand;
-                to.hand = player.hand;
-                player.hand = aux.hand;
+                var change = player.removeCardType($.CARD.CHANGE);
+                var set = new CardSet(player, [change]);
 
-                // TO-DO: Aplicar troca de cartas.
+                auxHand = otherPlayer.hand;
+                otherPlayer.hand = player.hand;
+                player.hand = auxHand;
+
+                set.effectPlayed = true;
+                game.discardPile.push(set);
+
+                io.in(game.id).emit($.GAME.PLAYER.CHANGE, {
+                    success: true,
+                    to: otherPlayer,
+                    from: player
+                });
+
+                socket.emit($.GAME.PLAYER.ENDTURN, {
+                    force: true,
+                    player: player
+                });
+
+                return;
             }
         })
 

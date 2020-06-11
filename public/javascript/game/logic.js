@@ -212,11 +212,6 @@ jQuery(document).ready(function ($) {
                 to: to
             })
 
-            console.log(cardIdsFromDOMData(cards));
-            console.log(to);
-            console.log(from);
-            console.log(game);
-
             GameRoom.hideOverlay();
         }
     });
@@ -850,6 +845,22 @@ jQuery(document).ready(function ($) {
             }
         }
     });
+
+    io.on($C.GAME.PLAYER.CHANGE, function (data) {
+        if (data.hasOwnProperty('error')) {
+            GameRoom.logError(data.error);
+        } else {
+
+            var currentUser = main.getCurrentUser();
+            var from = data.from.user;
+            var to = data.to.user;
+
+            var fromString = (currentUser.id === from.id) ? "Você" : from.name;
+            var toString = (currentUser.id === to.id) ? "Você" : to.name;
+
+            GameRoom.logSystemGreen(fromString + " aplicou Troca-Tudo em " + toString + " e todas as suas cartas foram trocadas!");
+        }
+    })
 
     /**
      * Start an x second timer on the nope button

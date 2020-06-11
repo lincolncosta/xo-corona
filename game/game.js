@@ -209,6 +209,7 @@ Game.prototype.start = function () {
     //Add in bombs
     for (var i = 0; i < this.players.length - 1; i++) {
         this.drawPile.push(new Card(this.generateRandomID(), 'Contaminação', $.CARD.INFECTION, 0));
+        this.drawPile.push(new Card(this.generateRandomID(), 'Troca-tudo', $.CARD.CHANGE, 0));
     }
 
     //Add in extra defuses to negate the lack of nopes
@@ -383,7 +384,6 @@ Game.prototype.resetDeck = function () {
             this.drawPile.push(new Card(this.generateRandomID(), 'Pular', $.CARD.SKIP, 1));
             this.drawPile.push(new Card(this.generateRandomID(), 'Favor', $.CARD.FAVOR, 2));
             this.drawPile.push(new Card(this.generateRandomID(), 'Embaralhar', $.CARD.SHUFFLE, 3));
-            this.drawPile.push(new Card(this.generateRandomID(), 'Troca-troca', $.CARD.CHANGE, 4));
 
             //Only add the reverse if we have more than 2 players since with 2 people order doesn't matter
             if (this.players.length > 2) {

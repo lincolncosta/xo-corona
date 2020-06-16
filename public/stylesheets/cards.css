@@ -80,7 +80,7 @@
 .card .tooltiptext {
     visibility: hidden;
     width: 20rem;
-    background-color: black;
+    background-color: rgba(0, 0, 0, 0.8);
     color: #fff;
     text-align: center;
     padding: 5px 10px;
@@ -94,16 +94,4 @@
 
 .card:hover .tooltiptext {
     visibility: visible;
-}
-
-.card .tooltiptext::after {
-    content: " ";
-    position: absolute;
-    top: 100%;
-    /* At the bottom of the tooltip */
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: black transparent transparent transparent;
 }

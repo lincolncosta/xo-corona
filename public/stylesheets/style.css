@@ -111,6 +111,11 @@ html, body {
     background: #26264C;
 }
 
+#rulesButton {
+    float: left;
+    border-radius: 0px;
+}
+
 #newGameButton {
     float: right;
     border-radius: 0px;

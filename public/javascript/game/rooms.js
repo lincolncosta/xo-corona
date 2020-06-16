@@ -85,7 +85,7 @@ var Lobby = {
         });
 
         //Set the user count
-        $('#userList .top-bar').text('Usuários conectados ( ' + Object.keys(EK.users).length + ' )');
+        $('#userList .top-bar').text('Usuários conectados (' + Object.keys(EK.users).length + ')');
 
     },
 

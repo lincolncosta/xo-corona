@@ -202,20 +202,20 @@ Game.prototype.start = function () {
     //Give each player a diffuse and 4 random card from the pile
     for (var key in this.players) {
         var player = this.players[key];
-        player.addCard(new Card(this.generateRandomID(), 'Prevenção', $.CARD.PREVENTION, 'a'));
+        player.addCard(new Card(this.generateRandomID(), 'Prevenção', $.CARD.PREVENTION, 'a', 'Salvará o jogador que a possuir caso o mesmo encontre uma carta de contaminação.'));
         this.drawCards(player, 4);
     }
     
     //Add in bombs
     for (var i = 0; i < this.players.length - 1; i ++) {
-        this.drawPile.push(new Card(this.generateRandomID(), 'Contaminação', $.CARD.INFECTION, 0));
+        this.drawPile.push(new Card(this.generateRandomID(), 'Contaminação', $.CARD.INFECTION, 0, 'Infectará o jogador que encontrar a carta a menos que o mesmo possua uma carta de Prevenção.'));
     }
     
     //Add in extra defuses to negate the lack of nopes
     var multiplier = (this.players.length > 5) ? 2 : 1;
     var count = (6 * multiplier) - this.players.length;
     for (var i = 0; i < count; i++) {
-        this.drawPile.push(new Card(this.generateRandomID(), 'Prevenção', $.CARD.PREVENTION, 0));
+        this.drawPile.push(new Card(this.generateRandomID(), 'Prevenção', $.CARD.PREVENTION, 0, 'Salvará o jogador que a possuir caso o mesmo encontre uma carta de contaminação.'));
     }
     
     this.shuffleDeck();
@@ -379,10 +379,10 @@ Game.prototype.resetDeck = function() {
     for (var i = 0; i < 5 * multiplier; i++) {
         if (i < 4 * multiplier) {
             //Special
-            this.drawPile.push(new Card(this.generateRandomID(), 'Ataque', $.CARD.ATTACK, 0));
-            this.drawPile.push(new Card(this.generateRandomID(), 'Pular', $.CARD.SKIP, 1));
-            this.drawPile.push(new Card(this.generateRandomID(), 'Favor', $.CARD.FAVOR, 2));
-            this.drawPile.push(new Card(this.generateRandomID(), 'Embaralhar', $.CARD.SHUFFLE, 3));
+            this.drawPile.push(new Card(this.generateRandomID(), 'Ataque', $.CARD.ATTACK, 0, 'Faz com que o próximo jogador compre uma carta extra durante a sua rodada e isenta o aplicante do efeito de comprar uma carta ao final do turno.'));
+            this.drawPile.push(new Card(this.generateRandomID(), 'Pular', $.CARD.SKIP, 1, 'Faz com que o jogador termine o seu turno sem precisar comprar uma carta do deck. É uma ação que pode ser anulada pela carta de Cancelamento.'));
+            this.drawPile.push(new Card(this.generateRandomID(), 'Favor', $.CARD.FAVOR, 2, 'Pede uma carta para qualquer jogador escolhido, a carta dada será de escolha do mesmo. É uma ação que pode ser anulada pela carta de Cancelamento.'));
+            this.drawPile.push(new Card(this.generateRandomID(), 'Embaralhar', $.CARD.SHUFFLE, 3, 'Embaralha a pilha de cartas.'));
             
             //Only add the reverse if we have more than 2 players since with 2 people order doesn't matter
             // if (this.players.length > 2) {
@@ -390,15 +390,15 @@ Game.prototype.resetDeck = function() {
             // }
             
             //Coringa
-            this.drawPile.push(new Card(this.generateRandomID(), 'alcool', $.CARD.REGULAR, 4));
-            this.drawPile.push(new Card(this.generateRandomID(), 'lenços-umidecidos', $.CARD.REGULAR, 5));
-            this.drawPile.push(new Card(this.generateRandomID(), 'mascara', $.CARD.REGULAR, 6));
-            this.drawPile.push(new Card(this.generateRandomID(), 'lenços-papel', $.CARD.REGULAR, 7));
-            this.drawPile.push(new Card(this.generateRandomID(), 'agua', $.CARD.REGULAR, 8));
+            this.drawPile.push(new Card(this.generateRandomID(), 'alcool', $.CARD.REGULAR, 4, 'É uma carta coringa, mas apesar do nome, não têm nada de especial e somente pode ser descartada em pares. Ao fazer, o jogador que descartou deve pegar uma carta aleatória da mão de qualquer adversário a sua escolha.'));
+            this.drawPile.push(new Card(this.generateRandomID(), 'lenços-umidecidos', $.CARD.REGULAR, 5, 'É uma carta coringa, mas apesar do nome, não têm nada de especial e somente pode ser descartada em pares. Ao fazer, o jogador que descartou deve pegar uma carta aleatória da mão de qualquer adversário a sua escolha.'));
+            this.drawPile.push(new Card(this.generateRandomID(), 'mascara', $.CARD.REGULAR, 6, 'É uma carta coringa, mas apesar do nome, não têm nada de especial e somente pode ser descartada em pares. Ao fazer, o jogador que descartou deve pegar uma carta aleatória da mão de qualquer adversário a sua escolha.'));
+            this.drawPile.push(new Card(this.generateRandomID(), 'lenços-papel', $.CARD.REGULAR, 7, 'É uma carta coringa, mas apesar do nome, não têm nada de especial e somente pode ser descartada em pares. Ao fazer, o jogador que descartou deve pegar uma carta aleatória da mão de qualquer adversário a sua escolha.'));
+            this.drawPile.push(new Card(this.generateRandomID(), 'agua', $.CARD.REGULAR, 8, 'É uma carta coringa, mas apesar do nome, não têm nada de especial e somente pode ser descartada em pares. Ao fazer, o jogador que descartou deve pegar uma carta aleatória da mão de qualquer adversário a sua escolha.'));
         }
         
-        this.drawPile.push(new Card(this.generateRandomID(), 'Prever', $.CARD.FUTURE, 9));
-        this.drawPile.push(new Card(this.generateRandomID(), 'Cancelamento', $.CARD.NOPE, 3));
+        this.drawPile.push(new Card(this.generateRandomID(), 'Prever', $.CARD.FUTURE, 9, 'Mostrará ao jogador que a utilizou as primeiras 3 cartas no topo do deck. É uma ação que pode ser anulada pela carta de Cancelamento.'));
+        this.drawPile.push(new Card(this.generateRandomID(), 'Cancelamento', $.CARD.NOPE, 3, 'Cancela o efeito da última carta jogada. Sempre que for possível utilizá-la, a interface exibirá um botão de ação.'));
     }
 }
 

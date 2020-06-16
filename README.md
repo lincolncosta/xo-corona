@@ -49,7 +49,7 @@ Vence o jogo o último jogador que não for infectado. As cartas na Pilha de Com
 * **Ataque**: Faz com que o próximo jogador compre uma carta extra durante a sua rodada e isenta o aplicante do efeito de comprar uma carta ao final do turno.
 * **Cancelamento**: Cancela o efeito da última carta jogada. Sempre que for possível utilizá-la, a interface exibirá um botão de ação.
 * **Contaminação**: Infectará o jogador que encontrar a carta a menos que o mesmo possua uma carta de Prevenção.
-* **Coringa**: Apesar do nome, não têm nada de especial e somente podem ser descartados em pares. Ao fazer, o jogador que descartou deve pegar uma carta aleatória da mão de qualquer jogador a sua escolha.
+* **Coringa**: Apesar do nome, não têm nada de especial e somente podem ser descartados em pares. Ao fazer, o jogador que descartou deve pegar uma carta aleatória da mão de qualquer adversário a sua escolha.
 * **Embaralhar**: Embaralha o deck de cartas.
 * **Favor**: Pede uma carta para qualquer jogador escolhido, a carta dada será de escolha do mesmo. É uma ação que pode ser anulada pela carta de Cancelamento.
 * **Prevenção**: Salvará o jogador que a possuir caso o mesmo encontre uma carta de contaminação.

@@ -21,7 +21,7 @@
  * @param {String} type The card type
  * @param {String} image The image
  */
-var Card = function(id, name, type, image) {
+var Card = function(id, name, type, image, effect) {
     
     //Card id
     this.id = id;
@@ -34,6 +34,9 @@ var Card = function(id, name, type, image) {
     
     //Card icon
     this.image = image;
+
+    //Card effect
+    this.effect = effect;
     
 }
 

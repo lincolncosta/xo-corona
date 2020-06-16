@@ -111,6 +111,15 @@ html, body {
     background: #26264C;
 }
 
+#readyGameButton, #startGameButton {
+    margin-top: 10px;
+}
+
+.rulesButton {
+    float: left;
+    border-radius: 0px;
+}
+
 #newGameButton {
     float: right;
     border-radius: 0px;
@@ -261,6 +270,18 @@ html, body {
     left: 0;
     margin: 10px;
     z-index: 25;
+}
+
+#game #rules {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 10px;
+    z-index: 25;
+}
+
+#game #rules .rulesButton {
+    border-radius: 4px !important;
 }
 
 #waitingInput {

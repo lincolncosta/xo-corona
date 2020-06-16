@@ -85,7 +85,7 @@
     text-align: center;
     padding: 5px 10px;
     border-radius: 6px;
-    /* Position the tooltip text - see examples below! */
+    bottom: 25rem;
     position: absolute;
     z-index: 1;
 }

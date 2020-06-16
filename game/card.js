@@ -20,24 +20,33 @@
  * @param {String} name The name
  * @param {String} type The card type
  * @param {String} image The image
+ * @param {String} effect The effect
+ * @param {Number} imgMin The img category min
+ * @param {Number} imgMax The img category max
  */
-var Card = function(id, name, type, image, effect) {
-    
-    //Card id
-    this.id = id;
-    
-    //Card name to display
-    this.name = name;
-    
-    //Card type
-    this.type = type;
-    
-    //Card icon
-    this.image = image;
+var Card = function (id, name, type, image, effect, imgMin, imgMax) {
 
-    //Card effect
-    this.effect = effect;
-    
+  //Card id
+  this.id = id;
+
+  //Card name to display
+  this.name = name;
+
+  //Card type
+  this.type = type;
+
+  //Card icon
+  this.image = image;
+
+  //Card effect
+  this.effect = effect;
+
+  //The img category min
+  this.imgMin = imgMin;
+
+  //The img category max
+  this.imgMax = imgMax;
+
 }
 
 module.exports = Card;

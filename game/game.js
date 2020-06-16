@@ -202,13 +202,13 @@ Game.prototype.start = function () {
     //Give each player a diffuse and 4 random card from the pile
     for (var key in this.players) {
         var player = this.players[key];
-        player.addCard(new Card(this.generateRandomID(), 'Prevenção', $.CARD.PREVENTION, 'a', 'Salvará o jogador que a possuir caso o mesmo encontre uma carta de contaminação.'));
+        player.addCard(new Card(this.generateRandomID(), 'Prevenção', $.CARD.PREVENTION, 'a', 'Salvará o jogador que a possuir caso o mesmo encontre uma carta de contaminação.', 5, 10));
         this.drawCards(player, 4);
     }
     
     //Add in bombs
     for (var i = 0; i < this.players.length - 1; i ++) {
-        this.drawPile.push(new Card(this.generateRandomID(), 'Contaminação', $.CARD.INFECTION, 0, 'Infectará o jogador que encontrar a carta a menos que o mesmo possua uma carta de Prevenção.'));
+        this.drawPile.push(new Card(this.generateRandomID(), 'Contaminação', $.CARD.INFECTION, 0, 'Infectará o jogador que encontrar a carta a menos que o mesmo possua uma carta de Prevenção.', 1, 4));
     }
     
     //Add in extra defuses to negate the lack of nopes

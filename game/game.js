@@ -380,19 +380,11 @@ Game.prototype.resetDeck = function () {
     for (var i = 0; i < 5 * multiplier; i++) {
         if (i < 4 * multiplier) {
             //Special
-<<<<<<< HEAD
-            this.drawPile.push(new Card(this.generateRandomID(), 'Ataque', $.CARD.ATTACK, 0));
-            this.drawPile.push(new Card(this.generateRandomID(), 'Pular', $.CARD.SKIP, 1));
-            this.drawPile.push(new Card(this.generateRandomID(), 'Favor', $.CARD.FAVOR, 2));
-            this.drawPile.push(new Card(this.generateRandomID(), 'Embaralhar', $.CARD.SHUFFLE, 3));
-
-=======
             this.drawPile.push(new Card(this.generateRandomID(), 'Ataque', $.CARD.ATTACK, 0, 'Faz com que o próximo jogador compre uma carta extra durante a sua rodada e isenta o aplicante do efeito de comprar uma carta ao final do turno.'));
             this.drawPile.push(new Card(this.generateRandomID(), 'Pular', $.CARD.SKIP, 1, 'Faz com que o jogador termine o seu turno sem precisar comprar uma carta do deck. É uma ação que pode ser anulada pela carta de Cancelamento.'));
             this.drawPile.push(new Card(this.generateRandomID(), 'Favor', $.CARD.FAVOR, 2, 'Pede uma carta para qualquer jogador escolhido, a carta dada será de escolha do mesmo. É uma ação que pode ser anulada pela carta de Cancelamento.'));
             this.drawPile.push(new Card(this.generateRandomID(), 'Embaralhar', $.CARD.SHUFFLE, 3, 'Embaralha a pilha de cartas.'));
 
->>>>>>> 7207050f4d50915fafe4174252ca3f764d27cc09
             //Only add the reverse if we have more than 2 players since with 2 people order doesn't matter
             if (this.players.length > 2) {
                 this.drawPile.push(new Card(this.generateRandomID(), 'Reverse', $.CARD.REVERSE, 3));
@@ -405,15 +397,9 @@ Game.prototype.resetDeck = function () {
             this.drawPile.push(new Card(this.generateRandomID(), 'lenços-papel', $.CARD.REGULAR, 7, 'É uma carta coringa, mas apesar do nome, não têm nada de especial e somente pode ser descartada em pares. Ao fazer, o jogador que descartou deve pegar uma carta aleatória da mão de qualquer adversário a sua escolha.'));
             this.drawPile.push(new Card(this.generateRandomID(), 'agua', $.CARD.REGULAR, 8, 'É uma carta coringa, mas apesar do nome, não têm nada de especial e somente pode ser descartada em pares. Ao fazer, o jogador que descartou deve pegar uma carta aleatória da mão de qualquer adversário a sua escolha.'));
         }
-<<<<<<< HEAD
-
-        this.drawPile.push(new Card(this.generateRandomID(), 'Prever', $.CARD.FUTURE, 9));
-        this.drawPile.push(new Card(this.generateRandomID(), 'Cancelamento', $.CARD.NOPE, 3));
-=======
 
         this.drawPile.push(new Card(this.generateRandomID(), 'Prever', $.CARD.FUTURE, 9, 'Mostrará ao jogador que a utilizou as primeiras 3 cartas no topo do deck. É uma ação que pode ser anulada pela carta de Cancelamento.'));
         this.drawPile.push(new Card(this.generateRandomID(), 'Cancelamento', $.CARD.NOPE, 3, 'Cancela o efeito da última carta jogada. Sempre que for possível utilizá-la, a interface exibirá um botão de ação.'));
->>>>>>> 7207050f4d50915fafe4174252ca3f764d27cc09
     }
 }
 

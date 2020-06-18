@@ -15,20 +15,44 @@
     border: 5px solid #000 !important;
 }
 
-.card-contaminação {
+.card-1 {
     background-image: url('../cards/1.jpg');
-    /* background-image: url(../cards/2.jpg); */
-    /* background-image: url(../cards/3.jpg); */
-    /* background-image: url(../cards/4.jpg); */
 }
 
-.card-prevenção {
+.card-2 {
+    background-image: url('../cards/2.jpg');
+}
+
+.card-3 {
+    background-image: url('../cards/3.jpg');
+}
+
+.card-4 {
+    background-image: url('../cards/4.jpg');
+}
+
+.card-5 {
     background-image: url('../cards/5.jpg');
-    /* background-image: url(../cards/6.jpg); */
-    /* background-image: url(../cards/7.jpg); */
-    /* background-image: url(../cards/8.jpg); */
-    /* background-image: url(../cards/9.jpg); */
-    /* background-image: url(../cards/10.jpg); */
+}
+
+.card-6 {
+    background-image: url('../cards/6.jpg');
+}
+
+.card-7 {
+    background-image: url('../cards/7.jpg');
+}
+
+.card-8 {
+    background-image: url('../cards/8.jpg');
+}
+
+.card-9 {
+    background-image: url('../cards/9.jpg');
+}
+
+.card-10 {
+    background-image: url('../cards/10.jpg');
 }
 
 .card-cancelamento {
@@ -73,4 +97,25 @@
 
 .image-agua {
     background-image: url('../cards/21.jpg');
+}
+
+/* Tooltip text */
+
+.card .tooltiptext {
+    visibility: hidden;
+    width: 20rem;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    text-align: center;
+    padding: 5px 10px;
+    border-radius: 6px;
+    bottom: 25rem;
+    position: absolute;
+    z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+
+.card:hover .tooltiptext {
+    visibility: visible;
 }

@@ -66,8 +66,9 @@ outro jogador), e sim a QUAISQUER cartas de mesmo nome (um par de Cartas de Emba
 
 ### COLABORADORES
 
-| [<img src="https://avatars0.githubusercontent.com/u/26147019?s=460&v=4" width=115><br><sub>@tekpixo</sub>](https://github.com/tekpixo) |
-| :---: |    
+| [<img src="https://avatars0.githubusercontent.com/u/26147019?s=460&v=4" width=115><br><sub>@tekpixo</sub>](https://github.com/tekpixo) | [<img src="https://avatars2.githubusercontent.com/u/39711165?s=460&v=4" width=115><br><sub>@saravendramini</sub>](https://github.com/saravendramini
+) |
+| :---: | :---: |  
 
 ### CRÉDITOS
 * Jogo de cartas original: http://www.explodingkittens.com/

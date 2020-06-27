@@ -102,7 +102,7 @@ var Lobby = {
             var html = "<div class='game' data-id='" + game.id + "'>" +
                 "<div id='top'>" +
                 "<div id='title'>" + game.title + "</div>" +
-                "<div id='status'>" + game.status + " carta(s) na mão</div>" +
+                "<div id='status'>" + game.status + " jogadores.</div>" +
                 "<div id='players'>Jogadores: " + game.players.length + "</div>" +
                 "</div>" +
                 "<div id='bottom'>" +
@@ -405,6 +405,14 @@ var GameRoom = {
         $('#overlay').show();
         $('#overlay .popup').hide();
         $('#blindStealPopup').show();
+        $('#playingInput button').addClass('disabled');
+    },
+
+    showChangeAllOverlay: function (EK) {
+        this.updateGameOverlay(EK);
+        $('#overlay').show();
+        $('#overlay .popup').hide();
+        $('#changeAllPopup').show();
         $('#playingInput button').addClass('disabled');
     },
 

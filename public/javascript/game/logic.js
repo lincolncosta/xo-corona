@@ -103,10 +103,13 @@ jQuery(document).ready(function ($) {
         switch (cards.length) {
             case 1:
                 var card = main.gameData.getCardFromHand(cards.data('id'));
+
                 if (card.type === $C.CARD.FAVOR) {
                     GameRoom.showFavorSelectOverlay(main);
                 } else if (card.type === $C.CARD.CHANGE) {
                     GameRoom.showChangeAllOverlay(main);
+                } else if (card.type === $C.CARD.LOCKDOWN) {
+                    GameRoom.showLockdownOverlay(main);
                 } else {
                     io.emit($C.GAME.PLAYER.PLAY, {
                         gameId: main.getCurrentUserGame().id,
@@ -210,6 +213,25 @@ jQuery(document).ready(function ($) {
             io.emit($C.GAME.PLAYER.CHANGE, {
                 gameId: game.id,
                 to: to
+            })
+
+            GameRoom.hideOverlay();
+        }
+    });
+
+    $('#lockdownButton').bind('click touchstart', function (e) {
+        e.preventDefault();
+        var cards = $("#playingInput .card[data-selected='true']");
+        var game = main.getCurrentUserGame();
+        var to = $('#lockdownPopup #player-select').val();
+        var from = game.getCurrentPlayer();
+
+        if (cards.length > 0 && to && game) {
+
+            io.emit($C.GAME.PLAYER.LOCKDOWN, {
+                gameId: game.id,
+                to,
+                from
             })
 
             GameRoom.hideOverlay();
@@ -862,6 +884,22 @@ jQuery(document).ready(function ($) {
         }
     })
 
+    io.on($C.GAME.PLAYER.LOCKDOWN, function (data) {
+        if (data.hasOwnProperty('error')) {
+            GameRoom.logError(data.error);
+        } else {
+
+            var currentUser = main.getCurrentUser();
+            var from = data.from.user;
+            var to = data.to.user;
+
+            var fromString = (currentUser.id === from.id) ? "Você" : from.name;
+            var toString = (currentUser.id === to.id) ? "Você" : to.name;
+
+            GameRoom.logSystemGreen(fromString + " aplicou Lockdown em " + toString + "!");
+        }
+    })
+
     /**
      * Start an x second timer on the nope button
      * @param {Number} time The time in milliseconds
@@ -964,7 +1002,7 @@ jQuery(document).ready(function ($) {
         $.each(data.players, function (index, player) {
             var user = main.users[player.user.id];
             if (user) {
-                players.push(new Player(user.id, player.alive, player.ready, player.drawAmount, player.cardCount));
+                players.push(new Player(user.id, player.alive, player.ready, player.drawAmount, player.cardCount, player.lockdown));
             }
         });
 

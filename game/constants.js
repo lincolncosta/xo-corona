@@ -57,7 +57,8 @@ var $ = {
             FAVOR: 'playerFavor',
             FUTURE: 'playerPrever',
             NOPE: 'playerCancelamento',
-            CHANGE: 'playerTrocaTroca'
+            CHANGE: 'playerTrocaTroca',
+            LOCKDOWN: 'playerLockdown'
         },
         REMOVED: 'gameRemoved'
     },

@@ -63,7 +63,8 @@ var $C = {
             FAVOR: 'playerFavor',
             FUTURE: 'playerPrever',
             NOPE: 'playerCancelamento',
-            CHANGE: 'playerTrocaTroca'
+            CHANGE: 'playerTrocaTroca',
+            LOCKDOWN: 'playerLockdown'
         },
         REMOVED: 'gameRemoved'
     },
@@ -84,7 +85,8 @@ var $C = {
         SHUFFLE: 'Embaralhar',
         REGULAR: 'Coringa',
         REVERSE: 'Reverse',
-        CHANGE: 'Troca-tudo'
+        CHANGE: 'Troca-tudo',
+        LOCKDOWN: 'Lockdown'
     },
     
     CARDSET: {

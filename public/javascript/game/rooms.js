@@ -416,6 +416,14 @@ var GameRoom = {
         $('#playingInput button').addClass('disabled');
     },
 
+    showLockdownOverlay: function (EK) {
+        this.updateGameOverlay(EK);
+        $('#overlay').show();
+        $('#overlay .popup').hide();
+        $('#lockdownPopup').show();
+        $('#playingInput button').addClass('disabled');
+    },
+
     showNamedStealOverlay: function (EK) {
         this.updateGameOverlay(EK);
         $('#overlay').show();
@@ -468,6 +476,8 @@ var GameRoom = {
      */
     shouldEnablePlayButton: function (EK) {
         //Get selected cards and add them to an array
+        var game = EK.getCurrentUserGame();
+        var currentPlayer = game.getCurrentPlayer();
         var ids = $("#playingInput .card[data-selected='true']");
         var cards = [];
         ids.each(function (index, element) {
@@ -478,16 +488,20 @@ var GameRoom = {
             }
         });
 
-        switch (cards.length) {
-            case 1: //Don't allow playing defuse, regular, nope or explode (if it somehow got into players hand)
-                return !(cards[0].type === $C.CARD.PREVENTION || cards[0].type === $C.CARD.INFECTION || cards[0].type === $C.CARD.REGULAR || cards[0].type === $C.CARD.NOPE);
-            case 2: //Blind pick
-            case 3: //Named pick
-                return EK.gameData.cardsMatching(cards);
-            case 5:
-                return EK.gameData.cardsDifferent(cards);
-            default:
-                return false;
+        console.log(currentPlayer);
+
+        if (!currentPlayer.lockdown) {
+            switch (cards.length) {
+                case 1: //Don't allow playing defuse, regular, nope or explode (if it somehow got into players hand)
+                    return !(cards[0].type === $C.CARD.PREVENTION || cards[0].type === $C.CARD.INFECTION || cards[0].type === $C.CARD.REGULAR || cards[0].type === $C.CARD.NOPE);
+                case 2: //Blind pick
+                case 3: //Named pick
+                    return EK.gameData.cardsMatching(cards);
+                case 5:
+                    return EK.gameData.cardsDifferent(cards);
+                default:
+                    return false;
+            }
         }
 
         return false;

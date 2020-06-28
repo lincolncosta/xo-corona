@@ -34,6 +34,9 @@ var Player = function(user) {
     
     //Set the player to ready
     this.ready = false;
+
+    //Player lockdown status
+    this.lockdown = false;
     
 };
 

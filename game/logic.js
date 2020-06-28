@@ -582,6 +582,49 @@ module.exports = function (io, EK) {
             }
         })
 
+        socket.on($.GAME.PLAYER.LOCKDOWN, function (data) {
+            //Get the game and check if it exists
+            var game = EK.gameList[data.gameId];
+
+            if (game && game.status == $.GAME.STATUS.PLAYING) {
+
+                var user = EK.connectedUsers[socket.id];
+                var player = game.getPlayer(user);
+
+                var other = EK.connectedUsers[data.to];
+                var otherPlayer = game.getPlayer(other);
+
+                //Check if we have right player
+                if (!data.hasOwnProperty('to') || !EK.connectedUsers[data.to] || !game.getPlayer(EK.connectedUsers[data.to])) {
+                    socket.emit($.GAME.PLAYER.LOCKDOWN, {
+                        error: 'Jogador inválido.'
+                    });
+                    return;
+                }
+
+                var lockdown = player.removeCardType($.CARD.LOCKDOWN);
+                var set = new CardSet(player, [lockdown]);
+                set.effectPlayed = true;
+                game.discardPile.push(set);
+
+                otherPlayer.lockdown = true;
+
+                // Update player's hand
+                socket.emit($.GAME.PLAYER.HAND, {
+                    player: game.getPlayer(user),
+                    hand: game.getPlayer(user).hand
+                });
+
+                io.in(game.id).emit($.GAME.PLAYER.LOCKDOWN, {
+                    success: true,
+                    to: otherPlayer,
+                    from: player
+                });
+
+                return;
+            }
+        })
+
         /**
          * Play cards.
          * 
@@ -819,7 +862,7 @@ module.exports = function (io, EK) {
 
                 } else {
                     socket.emit($.GAME.PLAYER.NOPE, {
-                        error: 'Could not play nope at this time!'
+                        error: 'Não é possível jogar cancelamentos agora!'
                     });
                 }
             }
@@ -1322,7 +1365,6 @@ module.exports = function (io, EK) {
                 id: game.id
             });
             EK.removeGame(game);
-            console.log('Jogo removido: ' + game.id);
             return;
         }
     }
@@ -1346,8 +1388,6 @@ module.exports = function (io, EK) {
             io.emit($.GAME.STOPPED, {
                 game: game.sanitize()
             });
-
-            console.log('Jogo pausado: ' + game.id);
         }
     }
 

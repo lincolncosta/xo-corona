@@ -1262,12 +1262,9 @@ module.exports = function (io, EK) {
             var player = game.players[i];
 
             if (player.hasCardType($.CARD.NOPE)) {
-                console.log('tem sim');
                 return true;
             }
         }
-
-        console.log('ngm tem');
         return false;
     }
 

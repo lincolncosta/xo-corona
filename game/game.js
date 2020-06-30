@@ -181,6 +181,16 @@ Game.prototype.generateRandomID = function () {
 }
 
 /**
+ * Generate a random image number
+ * @param   {Integer} min Min number
+ * @param   {Integer} min Max number
+ * @returns {String}   A random integer
+ */
+Game.prototype.generateRandomBetween = function (min, max) {
+    return parseInt(Math.random() * ((max + 1) - min) + min);
+}
+
+/**
  * Start the game.
  *
  * @returns {Boolean} If game started
@@ -203,21 +213,21 @@ Game.prototype.start = function () {
     //Give each player a diffuse and 4 random card from the pile
     for (var key in this.players) {
         var player = this.players[key];
-        player.addCard(new Card(this.generateRandomID(), 'Prevenção', $.CARD.PREVENTION, 'a', 'Salvará o jogador que a possuir caso o mesmo encontre uma carta de contaminação.', 5, 10));
+        player.addCard(new Card(this.generateRandomID(), 'Prevenção', $.CARD.PREVENTION, this.generateRandomBetween(5, 10), 'Salvará o jogador que a possuir caso o mesmo encontre uma carta de contaminação.'));
         this.drawCards(player, 4);
     }
 
     //Add in bombs
     for (var i = 0; i < this.players.length - 1; i++) {
-        this.drawPile.push(new Card(this.generateRandomID(), 'Contaminação', $.CARD.INFECTION, 0, 'Infectará o jogador que encontrar a carta a menos que o mesmo possua uma carta de Prevenção.', 1, 4));
-        this.drawPile.push(new Card(this.generateRandomID(), 'Troca-tudo', $.CARD.CHANGE, 0, '', 22, 22));
+        this.drawPile.push(new Card(this.generateRandomID(), 'Contaminação', $.CARD.INFECTION, this.generateRandomBetween(1, 4), 'Infectará o jogador que encontrar a carta a menos que o mesmo possua uma carta de Prevenção.'));
+        this.drawPile.push(new Card(this.generateRandomID(), 'Troca-tudo', $.CARD.CHANGE, this.generateRandomBetween(22, 22), ''));
     }
 
     //Add in extra defuses to negate the lack of nopes
     var multiplier = (this.players.length > 5) ? 2 : 1;
     var count = (6 * multiplier) - this.players.length;
     for (var i = 0; i < count; i++) {
-        this.drawPile.push(new Card(this.generateRandomID(), 'Prevenção', $.CARD.PREVENTION, 0, 'Salvará o jogador que a possuir caso o mesmo encontre uma carta de contaminação.', 5, 10));
+        this.drawPile.push(new Card(this.generateRandomID(), 'Prevenção', $.CARD.PREVENTION, this.generateRandomBetween(5, 10), 'Salvará o jogador que a possuir caso o mesmo encontre uma carta de contaminação.'));
     }
 
     this.shuffleDeck();
@@ -381,12 +391,12 @@ Game.prototype.resetDeck = function () {
     for (var i = 0; i < 5 * multiplier; i++) {
         if (i < 4 * multiplier) {
             //Special
-            this.drawPile.push(new Card(this.generateRandomID(), 'Ataque', $.CARD.ATTACK, 0, 'Faz com que o próximo jogador compre uma carta extra durante a sua rodada e isenta o aplicante do efeito de comprar uma carta ao final do turno.', 12, 12));
-            this.drawPile.push(new Card(this.generateRandomID(), 'Pular', $.CARD.SKIP, 1, 'Faz com que o jogador termine o seu turno sem precisar comprar uma carta do deck. É uma ação que pode ser anulada pela carta de Cancelamento.', 13, 13));
-            this.drawPile.push(new Card(this.generateRandomID(), 'Favor', $.CARD.FAVOR, 2, 'Pede uma carta para qualquer jogador escolhido, a carta dada será de escolha do mesmo. É uma ação que pode ser anulada pela carta de Cancelamento.', 14, 14));
-            this.drawPile.push(new Card(this.generateRandomID(), 'Embaralhar', $.CARD.SHUFFLE, 3, 'Embaralha a pilha de cartas.', 15, 15));
-            this.drawPile.push(new Card(this.generateRandomID(), 'Lockdown', $.CARD.LOCKDOWN, 0, 'Faz com que o jogador a sua escolha fique sem jogar por um turno.', 23, 23))
-            this.drawPile.push(new Card(this.generateRandomID(), 'Fake News', $.CARD.FAKENEWS, 0, 'Salvará o jogador que a possuir caso o mesmo encontre uma carta de contaminação.', 24, 25))
+            this.drawPile.push(new Card(this.generateRandomID(), 'Ataque', $.CARD.ATTACK, this.generateRandomBetween(12, 12), 'Faz com que o próximo jogador compre uma carta extra durante a sua rodada e isenta o aplicante do efeito de comprar uma carta ao final do turno.'));
+            this.drawPile.push(new Card(this.generateRandomID(), 'Pular', $.CARD.SKIP, this.generateRandomBetween(13, 13), 'Faz com que o jogador termine o seu turno sem precisar comprar uma carta do deck. É uma ação que pode ser anulada pela carta de Cancelamento.'));
+            this.drawPile.push(new Card(this.generateRandomID(), 'Favor', $.CARD.FAVOR, this.generateRandomBetween(14, 14), 'Pede uma carta para qualquer jogador escolhido, a carta dada será de escolha do mesmo. É uma ação que pode ser anulada pela carta de Cancelamento.'));
+            this.drawPile.push(new Card(this.generateRandomID(), 'Embaralhar', $.CARD.SHUFFLE, this.generateRandomBetween(15, 15), 'Embaralha a pilha de cartas.', 15, 15));
+            this.drawPile.push(new Card(this.generateRandomID(), 'Lockdown', $.CARD.LOCKDOWN, this.generateRandomBetween(23, 23), 'Faz com que o jogador a sua escolha fique sem jogar por um turno.'))
+            this.drawPile.push(new Card(this.generateRandomID(), 'Fake News', $.CARD.FAKENEWS, this.generateRandomBetween(24, 25), 'Salvará o jogador que a possuir caso o mesmo encontre uma carta de contaminação.'))
 
             //Only add the reverse if we have more than 2 players since with 2 people order doesn't matter
             // if (this.players.length > 2) {
@@ -401,8 +411,8 @@ Game.prototype.resetDeck = function () {
             this.drawPile.push(new Card(this.generateRandomID(), 'agua', $.CARD.REGULAR, 8, 'É uma carta coringa, mas apesar do nome, não têm nada de especial e somente pode ser descartada em pares. Ao fazer, o jogador que descartou deve pegar uma carta aleatória da mão de qualquer adversário a sua escolha.'));
         }
 
-        this.drawPile.push(new Card(this.generateRandomID(), 'Prever', $.CARD.FUTURE, 9, 'Mostrará ao jogador que a utilizou as primeiras 3 cartas no topo do deck. É uma ação que pode ser anulada pela carta de Cancelamento.', 16, 16));
-        this.drawPile.push(new Card(this.generateRandomID(), 'Cancelamento', $.CARD.NOPE, 3, 'Cancela o efeito da última carta jogada. Sempre que for possível utilizá-la, a interface exibirá um botão de ação.', 11, 11));
+        this.drawPile.push(new Card(this.generateRandomID(), 'Prever', $.CARD.FUTURE, this.generateRandomBetween(16, 16), 'Mostrará ao jogador que a utilizou as primeiras 3 cartas no topo do deck. É uma ação que pode ser anulada pela carta de Cancelamento.'));
+        this.drawPile.push(new Card(this.generateRandomID(), 'Cancelamento', $.CARD.NOPE, this.generateRandomBetween(11, 11), 'Cancela o efeito da última carta jogada. Sempre que for possível utilizá-la, a interface exibirá um botão de ação.'));
     }
 }
 

@@ -9,13 +9,13 @@
   <img width="125" src="./public/cards/14.jpg" />
   <img width="125" src="./public/cards/15.jpg" />
   <img width="125" src="./public/cards/16.jpg" />
+  <img width="125" src="./public/cards/22.jpg" />
+  <img width="125" src="./public/cards/23.jpg" />
   <img width="125" src="./public/cards/17.jpg" />
   <img width="125" src="./public/cards/18.jpg" />
   <img width="125" src="./public/cards/19.jpg" />
   <img width="125" src="./public/cards/20.jpg" />
   <img width="125" src="./public/cards/21.jpg" />
-  <img width="125" src="./public/cards/22.jpg" />
-  <img width="125" src="./public/cards/23.jpg" />
 </div>
 
 ## REGRAS

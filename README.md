@@ -86,8 +86,8 @@ outro jogador), e sim a QUAISQUER cartas de mesmo nome (um par de Cartas de Emba
 
 ### LICENÇA
 
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+Esse programa é um software livre: você pode redistribuí-lo e/ou modificá-lo sob os termos da Licença Pública Geral GNU publicada pela Fundação de Software Livre, seja na versão 3 da Licença, ou (caso deseje) qualquer versão posterior.
 
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+Esse programa é distribuído na esperança que seja útil, mas SEM QUALQUER GARANTIA; inclusive sem a garantia de comercialização ou funcionamento para um propósito específico. Veja a Licença Pública Geral GNU para mais detalhes.
 
-You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
+Você deve ter recebido uma cópia da Licença Pública Geral GNU ao receber esse programa. Caso não tenha recebido, acesse http://www.gnu.org/licenses/.

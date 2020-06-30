@@ -385,8 +385,8 @@ Game.prototype.resetDeck = function () {
             this.drawPile.push(new Card(this.generateRandomID(), 'Pular', $.CARD.SKIP, 1, 'Faz com que o jogador termine o seu turno sem precisar comprar uma carta do deck. É uma ação que pode ser anulada pela carta de Cancelamento.', 13, 13));
             this.drawPile.push(new Card(this.generateRandomID(), 'Favor', $.CARD.FAVOR, 2, 'Pede uma carta para qualquer jogador escolhido, a carta dada será de escolha do mesmo. É uma ação que pode ser anulada pela carta de Cancelamento.', 14, 14));
             this.drawPile.push(new Card(this.generateRandomID(), 'Embaralhar', $.CARD.SHUFFLE, 3, 'Embaralha a pilha de cartas.', 15, 15));
-            this.drawPile.push(new Card(this.generateRandomID(), 'Lockdown', $.CARD.LOCKDOWN, 0, 'Faz com que o jogador a sua escolha fique sem jogar por um turno.', 22, 22))
-            this.drawPile.push(new Card(this.generateRandomID(), 'Fake News', $.CARD.FAKENEWS, 0, '.', 23, 23))
+            this.drawPile.push(new Card(this.generateRandomID(), 'Lockdown', $.CARD.LOCKDOWN, 0, 'Faz com que o jogador a sua escolha fique sem jogar por um turno.', 23, 23))
+            this.drawPile.push(new Card(this.generateRandomID(), 'Fake News', $.CARD.FAKENEWS, 0, 'Salvará o jogador que a possuir caso o mesmo encontre uma carta de contaminação.', 24, 25))
 
             //Only add the reverse if we have more than 2 players since with 2 people order doesn't matter
             // if (this.players.length > 2) {

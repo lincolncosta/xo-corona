@@ -185,6 +185,12 @@ var GameRoom = {
                     drawButton.show();
                     nopeButton.hide();
 
+                    if (currentPlayer.lockdown) {
+                        playButton.text("Você está em lockdown e não pode descartar agora.");
+                    } else {
+                        playButton.text("Jogar");
+                    }
+
                     if ($("#playingInput .card[data-selected='true']").length < 1) {
                         drawButton.show();
                         playButton.hide();

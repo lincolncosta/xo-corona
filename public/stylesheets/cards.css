@@ -55,6 +55,22 @@
     background-image: url('../cards/10.jpg');
 }
 
+.card-22 {
+    background-image: url('../cards/22.jpg');
+}
+
+.card-23 {
+    background-image: url('../cards/23.jpg');
+}
+
+.card-24 {
+    background-image: url('../cards/24.jpg');
+}
+
+.card-25 {
+    background-image: url('../cards/25.jpg');
+}
+
 .card-cancelamento {
     background-image: url('../cards/11.jpg');
 }
@@ -97,6 +113,10 @@
 
 .image-agua {
     background-image: url('../cards/21.jpg');
+}
+
+.card-contamine {
+    display: none;
 }
 
 /* Tooltip text */

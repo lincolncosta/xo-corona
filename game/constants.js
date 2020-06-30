@@ -56,7 +56,10 @@ var $ = {
             STEAL: 'playerSteal',
             FAVOR: 'playerFavor',
             FUTURE: 'playerPrever',
-            NOPE: 'playerCancelamento'
+            NOPE: 'playerCancelamento',
+            CHANGE: 'playerTrocaTroca',
+            LOCKDOWN: 'playerLockdown',
+            FAKENEWS: 'playerFakeNews'
         },
         REMOVED: 'gameRemoved'
     },
@@ -76,7 +79,10 @@ var $ = {
         FAVOR: 'Favor',
         SHUFFLE: 'Embaralhar',
         REGULAR: 'Coringa',
-        REVERSE: 'Reverse'
+        REVERSE: 'Reverse',
+        CHANGE: 'Troca-tudo',
+        LOCKDOWN: 'Lockdown',
+        FAKENEWS: 'Fake News'
     },
     
     CARDSET: {

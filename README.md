@@ -16,6 +16,8 @@
   <img width="125" src="./public/cards/19.jpg" />
   <img width="125" src="./public/cards/20.jpg" />
   <img width="125" src="./public/cards/21.jpg" />
+  <img width="125" src="./public/cards/22.jpg" />
+  <img width="125" src="./public/cards/23.jpg" />
 </div>
 
 ## REGRAS

@@ -34,8 +34,15 @@ var Player = function(user) {
     
     //Set the player to ready
     this.ready = false;
+
+    //Player lockdown status
+    this.lockdown = false;
     
 };
+
+Player.prototype.getHand = function () {
+    return this.hand;
+}
 
 /**
  * Reset the player

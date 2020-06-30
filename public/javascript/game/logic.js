@@ -60,7 +60,7 @@ jQuery(document).ready(function ($) {
         }
     });
 
-    //Since we dynamically create the button, we have to call the clikc function this way
+    //Since we dynamically create the button, we have to call the click function this way
     $(document).on('click touchstart', '#joinGameButton', function (e) {
         e.preventDefault();
         var id = $(this).data("id");
@@ -103,8 +103,13 @@ jQuery(document).ready(function ($) {
         switch (cards.length) {
             case 1:
                 var card = main.gameData.getCardFromHand(cards.data('id'));
+
                 if (card.type === $C.CARD.FAVOR) {
                     GameRoom.showFavorSelectOverlay(main);
+                } else if (card.type === $C.CARD.CHANGE) {
+                    GameRoom.showChangeAllOverlay(main);
+                } else if (card.type === $C.CARD.LOCKDOWN) {
+                    GameRoom.showLockdownOverlay(main);
                 } else {
                     io.emit($C.GAME.PLAYER.PLAY, {
                         gameId: main.getCurrentUserGame().id,
@@ -194,6 +199,43 @@ jQuery(document).ready(function ($) {
             GameRoom.hideOverlay();
         }
 
+    });
+
+    $('#changeAllButton').bind('click touchstart', function (e) {
+        e.preventDefault();
+        var cards = $("#playingInput .card[data-selected='true']");
+        var game = main.getCurrentUserGame();
+        var to = $('#changeAllPopup #player-select').val();
+        var from = game.getCurrentPlayer();
+
+        if (cards.length > 0 && to && game) {
+
+            io.emit($C.GAME.PLAYER.CHANGE, {
+                gameId: game.id,
+                to: to
+            })
+
+            GameRoom.hideOverlay();
+        }
+    });
+
+    $('#lockdownButton').bind('click touchstart', function (e) {
+        e.preventDefault();
+        var cards = $("#playingInput .card[data-selected='true']");
+        var game = main.getCurrentUserGame();
+        var to = $('#lockdownPopup #player-select').val();
+        var from = game.getCurrentPlayer();
+
+        if (cards.length > 0 && to && game) {
+
+            io.emit($C.GAME.PLAYER.LOCKDOWN, {
+                gameId: game.id,
+                to,
+                from
+            })
+
+            GameRoom.hideOverlay();
+        }
     });
 
     $('#namedStealButton').bind('click touchstart', function (e) {
@@ -504,6 +546,10 @@ jQuery(document).ready(function ($) {
         }
     });
 
+    io.on($C.GAME.PLAYER.FAKENEWS, function (data) {
+        GameRoom.logLocal("Você encontrou uma carta de fake news e foi recompensado com uma carta de Prevenção!");
+    })
+
     io.on($C.GAME.PLAYER.FUTURE, function (data) {
         var cards = data.cards;
         if (cards.length > 0) {
@@ -548,7 +594,7 @@ jQuery(document).ready(function ($) {
             var message = null;
             switch (data.state) {
                 case $C.GAME.PLAYER.TURN.PREVENTED:
-                    message = user.name + " se previniu!";
+                    message = user.name + " foi salvo por uma Prevenção!";
                     break;
                 case $C.GAME.PLAYER.TURN.CONTAMINED:
                     message = user.name + " foi contaminado!";
@@ -580,7 +626,6 @@ jQuery(document).ready(function ($) {
 
             }
         }
-
     });
 
     io.on($C.GAME.PLAYER.DRAW, function (data) {
@@ -826,6 +871,38 @@ jQuery(document).ready(function ($) {
         }
     });
 
+    io.on($C.GAME.PLAYER.CHANGE, function (data) {
+        if (data.hasOwnProperty('error')) {
+            GameRoom.logError(data.error);
+        } else {
+
+            var currentUser = main.getCurrentUser();
+            var from = data.from.user;
+            var to = data.to.user;
+
+            var fromString = (currentUser.id === from.id) ? "Você" : from.name;
+            var toString = (currentUser.id === to.id) ? "Você" : to.name;
+
+            GameRoom.logSystemGreen(fromString + " aplicou Troca-Tudo em " + toString + " e todas as suas cartas foram trocadas!");
+        }
+    })
+
+    io.on($C.GAME.PLAYER.LOCKDOWN, function (data) {
+        if (data.hasOwnProperty('error')) {
+            GameRoom.logError(data.error);
+        } else {
+
+            var currentUser = main.getCurrentUser();
+            var from = data.from.user;
+            var to = data.to.user;
+
+            var fromString = (currentUser.id === from.id) ? "Você" : from.name;
+            var toString = (currentUser.id === to.id) ? "Você" : to.name;
+
+            GameRoom.logSystemGreen(fromString + " aplicou Lockdown em " + toString + "!");
+        }
+    })
+
     /**
      * Start an x second timer on the nope button
      * @param {Number} time The time in milliseconds
@@ -928,7 +1005,7 @@ jQuery(document).ready(function ($) {
         $.each(data.players, function (index, player) {
             var user = main.users[player.user.id];
             if (user) {
-                players.push(new Player(user.id, player.alive, player.ready, player.drawAmount, player.cardCount));
+                players.push(new Player(user.id, player.alive, player.ready, player.drawAmount, player.cardCount, player.lockdown));
             }
         });
 

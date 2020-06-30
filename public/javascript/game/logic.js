@@ -60,7 +60,7 @@ jQuery(document).ready(function ($) {
         }
     });
 
-    //Since we dynamically create the button, we have to call the clikc function this way
+    //Since we dynamically create the button, we have to call the click function this way
     $(document).on('click touchstart', '#joinGameButton', function (e) {
         e.preventDefault();
         var id = $(this).data("id");
@@ -546,6 +546,10 @@ jQuery(document).ready(function ($) {
         }
     });
 
+    io.on($C.GAME.PLAYER.FAKENEWS, function (data) {
+        GameRoom.logLocal("Você encontrou uma carta de fake news e foi recompensado com uma carta de Prevenção!");
+    })
+
     io.on($C.GAME.PLAYER.FUTURE, function (data) {
         var cards = data.cards;
         if (cards.length > 0) {
@@ -590,7 +594,7 @@ jQuery(document).ready(function ($) {
             var message = null;
             switch (data.state) {
                 case $C.GAME.PLAYER.TURN.PREVENTED:
-                    message = user.name + " se previniu!";
+                    message = user.name + " foi salvo por uma prevenção!";
                     break;
                 case $C.GAME.PLAYER.TURN.CONTAMINED:
                     message = user.name + " foi contaminado!";
@@ -622,7 +626,6 @@ jQuery(document).ready(function ($) {
 
             }
         }
-
     });
 
     io.on($C.GAME.PLAYER.DRAW, function (data) {

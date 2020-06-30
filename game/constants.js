@@ -58,7 +58,8 @@ var $ = {
             FUTURE: 'playerPrever',
             NOPE: 'playerCancelamento',
             CHANGE: 'playerTrocaTroca',
-            LOCKDOWN: 'playerLockdown'
+            LOCKDOWN: 'playerLockdown',
+            FAKENEWS: 'playerFakeNews'
         },
         REMOVED: 'gameRemoved'
     },
@@ -80,7 +81,8 @@ var $ = {
         REGULAR: 'Coringa',
         REVERSE: 'Reverse',
         CHANGE: 'Troca-tudo',
-        LOCKDOWN: 'Lockdown'
+        LOCKDOWN: 'Lockdown',
+        FAKENEWS: 'Fake News'
     },
     
     CARDSET: {

@@ -488,8 +488,6 @@ var GameRoom = {
             }
         });
 
-        console.log(currentPlayer);
-
         if (!currentPlayer.lockdown) {
             switch (cards.length) {
                 case 1: //Don't allow playing defuse, regular, nope or explode (if it somehow got into players hand)

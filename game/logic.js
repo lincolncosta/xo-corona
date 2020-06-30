@@ -431,13 +431,12 @@ module.exports = function (io, EK) {
          */
         socket.on($.GAME.DISCARDPILE, function (data) {
             var game = EK.gameList[data.gameId];
-            var player = game.getPlayer(user);
 
             //We can only get discard pile if game is playing
             if (game && game.status == $.GAME.STATUS.PLAYING) {
                 //Make sure user is in the game
                 var user = EK.connectedUsers[socket.id];
-                if (!player) return;
+                if (!game.getPlayer(user)) return;
 
                 socket.emit($.GAME.DISCARDPILE, {
                     cards: game.getDiscardPile()

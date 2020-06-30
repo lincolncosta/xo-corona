@@ -24,8 +24,6 @@ var app = require('../app');
 var debug = require('debug')('EK:server');
 var http = require('http');
 var EK = require('../game/EK');
-var jsdom = require('jsdom');
-$ = require('jquery')(new jsdom.JSDOM().window);
 var Logic = require('../game/logic');
 
 /**
@@ -55,7 +53,7 @@ server.on('listening', onListening);
  */
 var io = require('socket.io').listen(server);
 var game = new EK(io);
-var logic = new Logic(io, game, $);
+var logic = new Logic(io, game);
 
 /**
  * Normalize a port into a number, string, or false.

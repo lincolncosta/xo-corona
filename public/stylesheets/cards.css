@@ -115,6 +115,10 @@
     background-image: url('../cards/21.jpg');
 }
 
+.card-contamine {
+    display: none;
+}
+
 /* Tooltip text */
 
 .card .tooltiptext {

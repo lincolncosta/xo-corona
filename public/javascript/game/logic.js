@@ -594,7 +594,7 @@ jQuery(document).ready(function ($) {
             var message = null;
             switch (data.state) {
                 case $C.GAME.PLAYER.TURN.PREVENTED:
-                    message = user.name + " foi salvo por uma prevenção!";
+                    message = user.name + " foi salvo por uma Prevenção!";
                     break;
                 case $C.GAME.PLAYER.TURN.CONTAMINED:
                     message = user.name + " foi contaminado!";

@@ -314,8 +314,25 @@ html, body {
     padding: 10px;
 }
 
+#cardInput {
+    margin-top: 20px;
+    position: relative;
+}
+
+#playArea #cardInput {
+    margin: 0;
+    max-height: 250px;
+    min-height: 150px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    background: none;
+}
+
 #cardDisplay {
-    display: inline-flex;
+    overflow-x: scroll;
+    width: 100%;
+    white-space: nowrap;
 }
 
 #playGameButton {
@@ -330,10 +347,6 @@ html, body {
     -moz-box-shadow: none;
     box-shadow: none;
     background: none;
-}
-
-#playingInput #playArea #cardInput {
-    overflow-x: scroll;
 }
 
 .card:first-child {

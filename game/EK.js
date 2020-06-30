@@ -125,4 +125,14 @@ EK.prototype.generateRandomID = function() {
     return '_' + Math.random().toString(36).substr(2, 9);
 }
 
+/**
+ * Generate a random image number
+ * @param   {Integer} min Min number
+ * @param   {Integer} min Max number
+ * @returns {String}   A random integer
+ */
+EK.prototype.generateRandomBetween = function (min, max) {
+    return parseInt(Math.random() * ((max + 1) - min) + min);
+}
+
 module.exports = EK;

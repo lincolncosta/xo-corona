@@ -1,6 +1,7 @@
 .card {
     background-size: cover !important;
     background-position: center;
+    display: inline-flex;
     width: 139px;
     height: 269px;
     margin-right: 10px;

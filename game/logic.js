@@ -810,7 +810,9 @@ module.exports = function (io, EK) {
 
                     //Wait for nope requests
                     playedSet.nopePlayed = true;
-                    checkCancelamentos(playedSet, data, socket, game);
+                    if (cards[0].type != $.GAME.PLAYER.FAKENEWS) {
+                        checkCancelamentos(playedSet, data, socket, game);
+                    }
                 }
             }
         }); //End $.GAME.PLAYER.PLAY
@@ -1167,9 +1169,13 @@ module.exports = function (io, EK) {
                     break;
                 case $.CARD.FAKENEWS:
                     player.removeCardType($.CARD.FAKENEWS);
-                    player.addCard(new Card(EK.generateRandomID(), 'Prevenção', $.CARD.PREVENTION, 0, 'Salvará o jogador que a possuir caso o mesmo encontre uma carta de contaminação.', 5, 10))
+                    player.addCard(new Card(EK.generateRandomID(), 'Prevenção', $.CARD.PREVENTION, EK.generateRandomBetween(5, 10), 'Salvará o jogador que a possuir caso o mesmo encontre uma carta de contaminação.', 5, 10))
 
                     io.emit($.GAME.PLAYER.FAKENEWS, {});
+                    socket.emit($.GAME.PLAYER.HAND, {
+                        player: game.getPlayer(user),
+                        hand: game.getPlayer(user).hand
+                    });
                     break;
                 // case $.CARD.REVERSE:
                 //     //Switch direction

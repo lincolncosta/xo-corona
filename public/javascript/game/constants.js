@@ -78,7 +78,7 @@ var $C = {
     CARD: {
         ATTACK: 'Ataque',
         NOPE: 'Cancelamento',
-        PREVENT: 'Contamine',
+        PREVENT: 'Prevenção',
         CONTAMINE: 'Contamine',
         SKIP: 'Pular',
         FUTURE: 'Prever',

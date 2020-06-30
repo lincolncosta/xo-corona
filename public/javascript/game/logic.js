@@ -554,12 +554,12 @@ jQuery(document).ready(function ($) {
     io.on($C.GAME.PLAYER.FUTURE, function (data) {
         var cards = data.cards;
         if (cards.length > 0) {
-            //Tell player of the cards they see
-            var string = "Você vê um ";
+            var string = "Você vê as seguintes cartas: ";
             $.each(cards, function (index, card) {
                 string += card.name + ', ';
             });
-            string = string.slice(0, -2); //Remove ', '
+            string = string.slice(0, -2); // Remove vírgulas sobrando no final da string ', '
+            string = string.replace($C.CARD.FAKENEWS, $C.CARD.PREVENT); // Altera Fake News por Prevenção para que a carta não seja notada
             GameRoom.logLocal(string);
         } else {
             GameRoom.logLocal('Não há nada para ver!');
@@ -699,7 +699,7 @@ jQuery(document).ready(function ($) {
             var game = main.getCurrentUserGame();
 
             //Set the new set
-            if (data.set) {
+            if (data.set && cards[0].type != $C.CARD.FAKENEWS) {
                 main.gameData.currentPlayedSet = data.set;
                 //GameRoom.update(main);
                 GameRoom.logSystem("Um jogador pode jogar uma carta de cancelamento!");
@@ -754,7 +754,9 @@ jQuery(document).ready(function ($) {
             }
 
             //Start the timer again
-            startCancelamentoTimer(game.nopeTime);
+            if (cards[0].type != $C.CARD.FAKENEWS) {
+                startCancelamentoTimer(game.nopeTime);
+            }
 
             //Get the discard pile
             io.emit($C.GAME.DISCARDPILE, { gameId: game.id });

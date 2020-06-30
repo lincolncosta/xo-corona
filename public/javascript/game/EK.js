@@ -227,7 +227,7 @@ var Game = function (id, title, status, players, index, drawPileLength, nopeTime
         if (data) {
             for (var i = 0; i < this.players.length; i++) {
                 var player = this.players[i];
-                if (player.user === data.user.id) {
+                if (player.user === data.user?.id || player.user === data.user) {
                     cPlayer = player;
                     break;
                 };
@@ -239,6 +239,7 @@ var Game = function (id, title, status, players, index, drawPileLength, nopeTime
                 cPlayer.ready = data.ready;
                 cPlayer.drawAmount = data.drawAmount;
                 cPlayer.cardCount = data.cardCount;
+                cPlayer.lockdown = data.lockdown;
             }
         }
     }

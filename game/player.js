@@ -52,6 +52,7 @@ Player.prototype.reset = function() {
     this.alive = true;
     this.ready = false;
     this.drawAmount = 1;
+    this.lockdown = false;
 };
 
 /**

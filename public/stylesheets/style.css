@@ -332,6 +332,10 @@ html, body {
     background: none;
 }
 
+#playingInput #playArea #cardInput {
+    overflow-x: scroll;
+}
+
 .card:first-child {
     margin-left: 10px;
 }

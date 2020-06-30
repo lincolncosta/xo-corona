@@ -132,6 +132,7 @@ jQuery(document).ready(function ($) {
     $('#drawGameButton').bind('click touchstart', function (e) {
         e.preventDefault();
         var game = main.getCurrentUserGame();
+
         if (game && !main.gameData.currentPlayedSet) {
             io.emit($C.GAME.PLAYER.ENDTURN, { gameId: game.id });
         };

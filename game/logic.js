@@ -525,6 +525,7 @@ module.exports = function (io, EK) {
 
                             //Reset player draw amount (dead = 0, alive = 1)
                             player.drawAmount = Number(player.alive);
+                            player.lockdown = false;
 
                             //Send state information back
                             io.in(game.id).emit($.GAME.PLAYER.ENDTURN, {

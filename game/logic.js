@@ -17,9 +17,8 @@
 var User = require('./user');
 var Card = require('./card');
 var Game = require('./game');
-var CONSTANTS = require('./constants');
+var $ = require('./constants');
 var CardSet = require('./cardset');
-var $;
 
 /*
 TODO: Add reverse card
@@ -30,7 +29,7 @@ TODO: Add reverse card
  * @param {Object} io The socket io
  * @param {Object} EK The game instance
  */
-module.exports = function (io, EK, $) {
+module.exports = function (io, EK) {
 
     //************ Socket routes ************// 
 
@@ -47,15 +46,15 @@ module.exports = function (io, EK, $) {
                 if (!user) return;
 
                 //Tell everyone the user disconnected
-                io.emit(CONSTANTS.USER.DISCONNECT, {
+                io.emit($.USER.DISCONNECT, {
                     user: user
                 });
 
                 //Notify room
-                if (user.currentRoom != CONSTANTS.LOBBY.ROOM) {
+                if (user.currentRoom != $.LOBBY.ROOM) {
                     var game = EK.gameList[user.currentRoom];
                     if (game) {
-                        io.in(user.currentRoom).emit(CONSTANTS.GAME.PLAYER.DISCONNECT, {
+                        io.in(user.currentRoom).emit($.GAME.PLAYER.DISCONNECT, {
                             player: game.getPlayer(user),
                             game: game.sanitize()
                         });
@@ -81,12 +80,12 @@ module.exports = function (io, EK, $) {
          * 
          * @param {Object} data The data
          */
-        socket.on(CONSTANTS.LOBBY.CONNECT, function (data) {
+        socket.on($.LOBBY.CONNECT, function (data) {
             var valid = (data && data.hasOwnProperty('nickname'));
 
             //Check for valid nickname
             if (!valid) {
-                socket.emit(CONSTANTS.LOBBY.CONNECT, {
+                socket.emit($.LOBBY.CONNECT, {
                     error: 'Nickname inválido.'
                 });
                 return;
@@ -96,7 +95,7 @@ module.exports = function (io, EK, $) {
 
             //Check if a user with name is connected
             if (EK.isUserWithNameConnected(nickname)) {
-                socket.emit(CONSTANTS.LOBBY.CONNECT, {
+                socket.emit($.LOBBY.CONNECT, {
                     error: 'Já existe um jogador com esse nickname!'
                 });
                 return;
@@ -104,7 +103,7 @@ module.exports = function (io, EK, $) {
 
             //Check if current user is already connected
             if (socket.id in EK.connectedUsers) {
-                socket.emit(CONSTANTS.LOBBY.CONNECT, {
+                socket.emit($.LOBBY.CONNECT, {
                     error: 'Você já está conectado com outro nickname'
                 });
                 return;
@@ -112,22 +111,22 @@ module.exports = function (io, EK, $) {
 
             //Check if nickname is between 3 and 8 characters
             if (nickname.length < 3 || nickname.length > 10) {
-                socket.emit(CONSTANTS.LOBBY.CONNECT, {
+                socket.emit($.LOBBY.CONNECT, {
                     error: 'Seu nickname precisa conter de 3 a 10 caracteres!'
                 });
                 return;
             }
 
             //Join the lobby
-            socket.join(CONSTANTS.LOBBY.ROOM);
+            socket.join($.LOBBY.ROOM);
 
             //Create user
             var user = new User(socket.id, data.nickname);
             console.log('Usuário conectando: ' + user.id + ' ' + user.name);
 
             //Tell everyone user has connected
-            user.currentRoom = CONSTANTS.LOBBY.ROOM;
-            socket.broadcast.emit(CONSTANTS.USER.CONNECT, {
+            user.currentRoom = $.LOBBY.ROOM;
+            socket.broadcast.emit($.USER.CONNECT, {
                 user: user
             });
 
@@ -140,7 +139,7 @@ module.exports = function (io, EK, $) {
 
             //Add the user and send them the data
             EK.addUser(user);
-            socket.emit(CONSTANTS.LOBBY.CONNECT, {
+            socket.emit($.LOBBY.CONNECT, {
                 success: 'Conectado com sucesso!',
                 user: user,
                 connectedUsers: EK.connectedUsers,
@@ -158,10 +157,10 @@ module.exports = function (io, EK, $) {
          * 
          * @param {Object} data The data
          */
-        socket.on(CONSTANTS.GAME.CREATE, function (data) {
+        socket.on($.GAME.CREATE, function (data) {
             var title = data.title;
             if (!title || title.length <= 0 || title.length >= 30) {
-                socket.emit(CONSTANTS.GAME.CREATE, {
+                socket.emit($.GAME.CREATE, {
                     error: "Título inválido."
                 });
                 return;
@@ -171,7 +170,7 @@ module.exports = function (io, EK, $) {
             for (var key in EK.gameList) {
                 var game = EK.gameList[key];
                 if (game.title === title) {
-                    socket.emit(CONSTANTS.GAME.CREATE, {
+                    socket.emit($.GAME.CREATE, {
                         error: "Já existe um jogo com esse título!"
                     });
                     return;
@@ -180,8 +179,8 @@ module.exports = function (io, EK, $) {
 
             //Make sure user is in lobby
             var user = EK.connectedUsers[socket.id];
-            if (user.currentRoom != CONSTANTS.LOBBY.ROOM) {
-                socket.emit(CONSTANTS.GAME.CREATE, {
+            if (user.currentRoom != $.LOBBY.ROOM) {
+                socket.emit($.GAME.CREATE, {
                     error: "Jogador está em outro lobby."
                 });
                 return;
@@ -198,7 +197,7 @@ module.exports = function (io, EK, $) {
 
             //Add the user
             if (!addUserToGame(user, game, socket)) {
-                socket.emit(CONSTANTS.GAME.CREATE, {
+                socket.emit($.GAME.CREATE, {
                     error: "Falha ao criar o jogo."
                 });
                 return;
@@ -209,12 +208,12 @@ module.exports = function (io, EK, $) {
             EK.addGame(game);
 
             //Tell everyone a game was created
-            io.emit(CONSTANTS.GAME.CREATED, {
+            io.emit($.GAME.CREATED, {
                 game: game.sanitize()
             });
 
             //Return the game data to the user
-            socket.emit(CONSTANTS.GAME.CREATE, {
+            socket.emit($.GAME.CREATE, {
                 success: 'Jogo criado',
                 game: game.sanitize()
             });
@@ -230,13 +229,13 @@ module.exports = function (io, EK, $) {
          * 
          * @param {Object} data The data
          */
-        socket.on(CONSTANTS.GAME.JOIN, function (data) {
+        socket.on($.GAME.JOIN, function (data) {
             //Get the game and check if it exists
             var game = EK.gameList[data.gameId];
             var user = EK.connectedUsers[socket.id];
 
             if (!game) {
-                socket.emit(CONSTANTS.GAME.JOIN, {
+                socket.emit($.GAME.JOIN, {
                     error: 'Jogo inválido.'
                 });
                 return;
@@ -244,7 +243,7 @@ module.exports = function (io, EK, $) {
 
             //Add player
             if (!addUserToGame(user, game, socket)) {
-                socket.emit(CONSTANTS.GAME.JOIN, {
+                socket.emit($.GAME.JOIN, {
                     error: 'Falha ao entrar no jogo.'
                 });
                 return;
@@ -253,19 +252,19 @@ module.exports = function (io, EK, $) {
             var currentPlayer = game.getPlayer(user);
 
             //Notify the players in the game that user has joined
-            socket.broadcast.in(game.id).emit(CONSTANTS.GAME.PLAYER.CONNECT, {
+            socket.broadcast.in(game.id).emit($.GAME.PLAYER.CONNECT, {
                 game: game.sanitize(),
                 player: currentPlayer
             });
 
             //Send data to player
-            socket.emit(CONSTANTS.GAME.JOIN, {
+            socket.emit($.GAME.JOIN, {
                 success: 'Conectado ao jogo com sucesso!',
                 game: game.sanitize()
             });
 
             //Send data to everyone
-            io.emit(CONSTANTS.GAME.UPDATE, {
+            io.emit($.GAME.UPDATE, {
                 game: game.sanitize()
             });
         });
@@ -280,12 +279,12 @@ module.exports = function (io, EK, $) {
          * 
          * @param {Object} data The data
          */
-        socket.on(CONSTANTS.GAME.LEAVE, function (data) {
+        socket.on($.GAME.LEAVE, function (data) {
             //Get the game and check if it exists
             var game = EK.gameList[data.gameId];
             var user = EK.connectedUsers[socket.id];
             if (!game) {
-                socket.emit(CONSTANTS.GAME.LEAVE, {
+                socket.emit($.GAME.LEAVE, {
                     error: 'Jogo inválido'
                 });
                 return;
@@ -303,16 +302,16 @@ module.exports = function (io, EK, $) {
             removeUserFromGame(user, game, io, socket);
 
             //Notify players that user has left
-            io.in(game.id).emit(CONSTANTS.GAME.PLAYER.DISCONNECT, {
+            io.in(game.id).emit($.GAME.PLAYER.DISCONNECT, {
                 player: player,
                 game: game.sanitize()
             });
 
-            socket.emit(CONSTANTS.GAME.LEAVE, {
+            socket.emit($.GAME.LEAVE, {
                 success: 'Saiu do jogo.'
             });
 
-            io.emit(CONSTANTS.GAME.UPDATE, {
+            io.emit($.GAME.UPDATE, {
                 game: game.sanitize()
             });
         });
@@ -329,26 +328,26 @@ module.exports = function (io, EK, $) {
          * 
          * @param {Object} data The data
          */
-        socket.on(CONSTANTS.GAME.START, function (data) {
+        socket.on($.GAME.START, function (data) {
             var game = EK.gameList[data.gameId];
 
-            if (game && game.status == CONSTANTS.GAME.STATUS.WAITING) {
+            if (game && game.status == $.GAME.STATUS.WAITING) {
                 var user = EK.connectedUsers[socket.id];
                 if (user === game.gameHost()) {
                     if (game.start()) {
                         //Tell everyone game has started, from there they individually send a request for their hand
-                        io.in(game.id).emit(CONSTANTS.GAME.START, {
+                        io.in(game.id).emit($.GAME.START, {
                             game: game.sanitize()
                         });
 
                         //Message lobby
-                        io.emit(CONSTANTS.GAME.STARTED, {
+                        io.emit($.GAME.STARTED, {
                             game: game.sanitize()
                         });
 
                         console.log('Jogo iniciado: ' + game.id);
                     } else {
-                        socket.emit(CONSTANTS.GAME.START, {
+                        socket.emit($.GAME.START, {
                             error: 'Não foi possível iniciar o jogo.'
                         });
                     }
@@ -366,7 +365,7 @@ module.exports = function (io, EK, $) {
          * 
          * @param {Object} data The data
          */
-        socket.on(CONSTANTS.GAME.STOP, function (data) {
+        socket.on($.GAME.STOP, function (data) {
             stopGame(io, data);
         });
 
@@ -379,16 +378,16 @@ module.exports = function (io, EK, $) {
          * 
          * @param {Object} data The data
          */
-        socket.on(CONSTANTS.GAME.PLAYER.READY, function (data) {
+        socket.on($.GAME.PLAYER.READY, function (data) {
             var game = EK.gameList[data.gameId];
 
             //We can only ready up if the game state is waiting
-            if (game && game.status == CONSTANTS.GAME.STATUS.WAITING) {
+            if (game && game.status == $.GAME.STATUS.WAITING) {
                 var user = EK.connectedUsers[socket.id];
                 var ready = game.toggleReady(user);
 
                 //Tell everyone in room the ready state of the player
-                io.in(game.id).emit(CONSTANTS.GAME.PLAYER.READY, {
+                io.in(game.id).emit($.GAME.PLAYER.READY, {
                     player: game.getPlayer(user)
                 });
             }
@@ -403,17 +402,17 @@ module.exports = function (io, EK, $) {
          * 
          * @param {Object} data The data
          */
-        socket.on(CONSTANTS.GAME.PLAYER.HAND, function (data) {
+        socket.on($.GAME.PLAYER.HAND, function (data) {
             var game = EK.gameList[data.gameId];
 
             //We can only get hand if game is playing
-            if (game && game.status == CONSTANTS.GAME.STATUS.PLAYING) {
+            if (game && game.status == $.GAME.STATUS.PLAYING) {
                 var user = EK.connectedUsers[socket.id];
                 var player = game.getPlayer(user);
 
                 //Return the player hand
                 if (player) {
-                    socket.emit(CONSTANTS.GAME.PLAYER.HAND, {
+                    socket.emit($.GAME.PLAYER.HAND, {
                         player: game.getPlayer(user),
                         hand: game.getPlayer(user).hand
                     });
@@ -430,17 +429,17 @@ module.exports = function (io, EK, $) {
          * 
          * @param {Object} data The data
          */
-        socket.on(CONSTANTS.GAME.DISCARDPILE, function (data) {
+        socket.on($.GAME.DISCARDPILE, function (data) {
             var game = EK.gameList[data.gameId];
             var player = game.getPlayer(user);
 
             //We can only get discard pile if game is playing
-            if (game && game.status == CONSTANTS.GAME.STATUS.PLAYING) {
+            if (game && game.status == $.GAME.STATUS.PLAYING) {
                 //Make sure user is in the game
                 var user = EK.connectedUsers[socket.id];
                 if (!player) return;
 
-                socket.emit(CONSTANTS.GAME.DISCARDPILE, {
+                socket.emit($.GAME.DISCARDPILE, {
                     cards: game.getDiscardPile()
                 });
             };
@@ -450,22 +449,22 @@ module.exports = function (io, EK, $) {
          * End current players turn
          * @param {Object} data The data
          */
-        socket.on(CONSTANTS.GAME.PLAYER.ENDTURN, function (data) {
+        socket.on($.GAME.PLAYER.ENDTURN, function (data) {
             //Get the game and check if it exists
             var game = EK.gameList[data.gameId];
 
-            if (game && game.status == CONSTANTS.GAME.STATUS.PLAYING) {
+            if (game && game.status == $.GAME.STATUS.PLAYING) {
                 var user = EK.connectedUsers[socket.id];
 
                 //Only end turn if we are the current player and the last played set effect was fulfilled
                 //E.g for favors you need to wait for the other player before you can end your turn
                 if (game.cUserIndex == game.playerIndexForUser(user)) {
-                    var state = CONSTANTS.GAME.PLAYER.TURN.SURVIVED;
+                    var state = $.GAME.PLAYER.TURN.SURVIVED;
                     var player = game.getPlayer(user);
 
                     //Check if effects have been played
                     if (!effectsPlayed(game, player)) {
-                        socket.emit(CONSTANTS.GAME.PLAYER.ENDTURN, {
+                        socket.emit($.GAME.PLAYER.ENDTURN, {
                             error: 'Esperando a aplicação do efeito da cartão.'
                         });
                         return;
@@ -475,37 +474,37 @@ module.exports = function (io, EK, $) {
                         //Make player draw a card and if it is an explode then remove a defuse
                         //If player has no defuse then player is out
                         var drawn = game.drawCards(player, 1);
-                        socket.emit(CONSTANTS.GAME.PLAYER.DRAW, {
+                        socket.emit($.GAME.PLAYER.DRAW, {
                             game: game.sanitize(),
                             cards: drawn,
                             hand: player.hand
                         });
 
                         //Tell other players that player drew a card
-                        socket.broadcast.in(game.id).emit(CONSTANTS.GAME.PLAYER.DRAW, {
+                        socket.broadcast.in(game.id).emit($.GAME.PLAYER.DRAW, {
                             game: game.sanitize(),
                             player: player
                         });
                     }
 
                     //Use while loop incase player picks up 2 explodes
-                    while (player.hasCardType(CONSTANTS.CARD.INFECTION)) {
-                        if (player.hasCardType(CONSTANTS.CARD.PREVENTION)) {
+                    while (player.hasCardType($.CARD.INFECTION)) {
+                        if (player.hasCardType($.CARD.PREVENTION)) {
                             //Remove defuse and add it to the discard pile
-                            var defuse = player.removeCardType(CONSTANTS.CARD.PREVENTION);
+                            var defuse = player.removeCardType($.CARD.PREVENTION);
                             var set = new CardSet(player, [defuse]);
                             set.effectPlayed = true;
                             game.discardPile.push(set);
 
                             //Add the bomb back into the draw pile at a random position
-                            var explode = player.removeCardType(CONSTANTS.CARD.INFECTION);
+                            var explode = player.removeCardType($.CARD.INFECTION);
                             var index = Math.floor(Math.random() * (game.drawPile.length));
                             game.drawPile.splice(index, 0, explode);
 
-                            state = CONSTANTS.GAME.PLAYER.TURN.PREVENTED;
+                            state = $.GAME.PLAYER.TURN.PREVENTED;
                         } else {
                             //Player exploded
-                            state = CONSTANTS.GAME.PLAYER.TURN.INFECTED;
+                            state = $.GAME.PLAYER.TURN.INFECTED;
                             game.explodePlayer(player);
                         }
                     }
@@ -514,7 +513,7 @@ module.exports = function (io, EK, $) {
                     if (!checkGameWin(game)) {
 
                         //Check if player defused or exploded, if so then they have to end their turn no matter the amount of draws remaining
-                        if (!(state === CONSTANTS.GAME.PLAYER.TURN.SURVIVED)) player.drawAmount = 1;
+                        if (!(state === $.GAME.PLAYER.TURN.SURVIVED)) player.drawAmount = 1;
 
                         player.drawAmount -= 1;
 
@@ -529,7 +528,7 @@ module.exports = function (io, EK, $) {
                             player.drawAmount = Number(player.alive);
 
                             //Send state information back
-                            io.in(game.id).emit(CONSTANTS.GAME.PLAYER.ENDTURN, {
+                            io.in(game.id).emit($.GAME.PLAYER.ENDTURN, {
                                 player: player,
                                 state: state,
                                 game: game.sanitize() //Send updated game info back
@@ -540,11 +539,11 @@ module.exports = function (io, EK, $) {
             }
         });
 
-        socket.on(CONSTANTS.GAME.PLAYER.CHANGE, function (data) {
+        socket.on($.GAME.PLAYER.CHANGE, function (data) {
             //Get the game and check if it exists
             var game = EK.gameList[data.gameId];
 
-            if (game && game.status == CONSTANTS.GAME.STATUS.PLAYING) {
+            if (game && game.status == $.GAME.STATUS.PLAYING) {
 
                 var user = EK.connectedUsers[socket.id];
                 var player = game.getPlayer(user);
@@ -554,13 +553,13 @@ module.exports = function (io, EK, $) {
 
                 //Check if we have right player
                 if (!data.hasOwnProperty('to') || !EK.connectedUsers[data.to] || !game.getPlayer(EK.connectedUsers[data.to])) {
-                    socket.emit(CONSTANTS.GAME.PLAYER.CHANGE, {
+                    socket.emit($.GAME.PLAYER.CHANGE, {
                         error: 'Jogador inválido.'
                     });
                     return;
                 }
 
-                var change = player.removeCardType(CONSTANTS.CARD.CHANGE);
+                var change = player.removeCardType($.CARD.CHANGE);
                 var set = new CardSet(player, [change]);
 
                 auxHand = otherPlayer.hand;
@@ -570,13 +569,13 @@ module.exports = function (io, EK, $) {
                 set.effectPlayed = true;
                 game.discardPile.push(set);
 
-                io.in(game.id).emit(CONSTANTS.GAME.PLAYER.CHANGE, {
+                io.in(game.id).emit($.GAME.PLAYER.CHANGE, {
                     success: true,
                     to: otherPlayer,
                     from: player
                 });
 
-                socket.emit(CONSTANTS.GAME.PLAYER.ENDTURN, {
+                socket.emit($.GAME.PLAYER.ENDTURN, {
                     force: true,
                     player: player
                 });
@@ -585,11 +584,11 @@ module.exports = function (io, EK, $) {
             }
         })
 
-        socket.on(CONSTANTS.GAME.PLAYER.LOCKDOWN, function (data) {
+        socket.on($.GAME.PLAYER.LOCKDOWN, function (data) {
             //Get the game and check if it exists
             var game = EK.gameList[data.gameId];
 
-            if (game && game.status == CONSTANTS.GAME.STATUS.PLAYING) {
+            if (game && game.status == $.GAME.STATUS.PLAYING) {
 
                 var user = EK.connectedUsers[socket.id];
                 var player = game.getPlayer(user);
@@ -599,13 +598,13 @@ module.exports = function (io, EK, $) {
 
                 //Check if we have right player
                 if (!data.hasOwnProperty('to') || !EK.connectedUsers[data.to] || !game.getPlayer(EK.connectedUsers[data.to])) {
-                    socket.emit(CONSTANTS.GAME.PLAYER.LOCKDOWN, {
+                    socket.emit($.GAME.PLAYER.LOCKDOWN, {
                         error: 'Jogador inválido.'
                     });
                     return;
                 }
 
-                var lockdown = player.removeCardType(CONSTANTS.CARD.LOCKDOWN);
+                var lockdown = player.removeCardType($.CARD.LOCKDOWN);
                 var set = new CardSet(player, [lockdown]);
                 set.effectPlayed = true;
                 game.discardPile.push(set);
@@ -613,12 +612,12 @@ module.exports = function (io, EK, $) {
                 otherPlayer.lockdown = true;
 
                 // Update player's hand
-                socket.emit(CONSTANTS.GAME.PLAYER.HAND, {
+                socket.emit($.GAME.PLAYER.HAND, {
                     player: game.getPlayer(user),
                     hand: game.getPlayer(user).hand
                 });
 
-                io.in(game.id).emit(CONSTANTS.GAME.PLAYER.LOCKDOWN, {
+                io.in(game.id).emit($.GAME.PLAYER.LOCKDOWN, {
                     success: true,
                     to: otherPlayer,
                     from: player
@@ -641,9 +640,9 @@ module.exports = function (io, EK, $) {
          * 
          * @param {Object} data The data
          */
-        socket.on(CONSTANTS.GAME.PLAYER.PLAY, function (data) {
+        socket.on($.GAME.PLAYER.PLAY, function (data) {
             var game = EK.gameList[data.gameId];
-            if (game && game.status == CONSTANTS.GAME.STATUS.PLAYING) {
+            if (game && game.status == $.GAME.STATUS.PLAYING) {
                 //Check if it is the current users turn
                 var user = EK.connectedUsers[socket.id];
                 if (game.cUserIndex == game.playerIndexForUser(user) && data.cards.length > 0) {
@@ -651,7 +650,7 @@ module.exports = function (io, EK, $) {
 
                     //Check if player is alive
                     if (!player.alive) {
-                        socket.emit(CONSTANTS.GAME.PLAYER.PLAY, {
+                        socket.emit($.GAME.PLAYER.PLAY, {
                             error: 'Não é possível jogar essa carta.'
                         });
                         return;
@@ -659,7 +658,7 @@ module.exports = function (io, EK, $) {
 
                     //Check if effects have been played
                     if (!effectsPlayed(game, player)) {
-                        socket.emit(CONSTANTS.GAME.PLAYER.PLAY, {
+                        socket.emit($.GAME.PLAYER.PLAY, {
                             error: 'Esperando a aplicação do efeito da cartão.'
                         });
                         return;
@@ -667,7 +666,7 @@ module.exports = function (io, EK, $) {
 
                     //Check if the player has the cards
                     if (!player.hasCardsWithId(data.cards)) {
-                        socket.emit(CONSTANTS.GAME.PLAYER.PLAY, {
+                        socket.emit($.GAME.PLAYER.PLAY, {
                             error: 'O jogador não possui cartas.'
                         });
                         return;
@@ -679,15 +678,15 @@ module.exports = function (io, EK, $) {
 
                     //Disallow playing the defuse, regular or nope alone
                     if (cards.length == 1) {
-                        if (cards[0].type === CONSTANTS.CARD.PREVENTION || cards[0].type === CONSTANTS.CARD.REGULAR || cards[0].type === CONSTANTS.CARD.NOPE) {
-                            socket.emit(CONSTANTS.GAME.PLAYER.PLAY, {
+                        if (cards[0].type === $.CARD.PREVENTION || cards[0].type === $.CARD.REGULAR || cards[0].type === $.CARD.NOPE) {
+                            socket.emit($.GAME.PLAYER.PLAY, {
                                 error: 'Não é possível jogar cartas de Prevenção, Coringa ou Cancelamento sozinhas!'
                             });
                             return;
                         }
 
-                        if (cards[0].type === CONSTANTS.CARD.INFECTION) {
-                            socket.emit(CONSTANTS.GAME.PLAYER.PLAY, {
+                        if (cards[0].type === $.CARD.INFECTION) {
+                            socket.emit($.GAME.PLAYER.PLAY, {
                                 error: 'Não é possível jogar Contaminação! E como você conseguiu essa carta, malandro(a)?'
                             });
                             return;
@@ -710,10 +709,10 @@ module.exports = function (io, EK, $) {
                     if (playedSet.cards.length > 1) {
                         var steal = playedSet.canSteal();
                         switch (steal) {
-                            case CONSTANTS.CARDSET.STEAL.BLIND:
+                            case $.CARDSET.STEAL.BLIND:
                                 //Only steal if we have someone to steal from
                                 if (!otherPlayerExists(data)) {
-                                    socket.emit(CONSTANTS.GAME.PLAYER.PLAY, {
+                                    socket.emit($.GAME.PLAYER.PLAY, {
                                         error: 'Jogador inválido selecionado.'
                                     });
                                     return;
@@ -724,17 +723,17 @@ module.exports = function (io, EK, $) {
 
                                 //Check if the other player has any cards
                                 if (otherPlayer && otherPlayer.hand.length < 1) {
-                                    socket.emit(CONSTANTS.GAME.PLAYER.PLAY, {
+                                    socket.emit($.GAME.PLAYER.PLAY, {
                                         error: 'Jogador não tem cartas na mão!'
                                     });
                                     return;
                                 }
 
                                 break;
-                            case CONSTANTS.CARDSET.STEAL.NAMED:
+                            case $.CARDSET.STEAL.NAMED:
                                 //Only steal if we have someone to steal from
                                 if (!otherPlayerExists(data)) {
-                                    socket.emit(CONSTANTS.GAME.PLAYER.PLAY, {
+                                    socket.emit($.GAME.PLAYER.PLAY, {
                                         error: 'Jogador inválido selecionado.'
                                     });
                                     return;
@@ -742,17 +741,17 @@ module.exports = function (io, EK, $) {
 
                                 //Make sure we have a specified card selected
                                 if (!data.hasOwnProperty('cardType')) {
-                                    socket.emit(CONSTANTS.GAME.PLAYER.PLAY, {
+                                    socket.emit($.GAME.PLAYER.PLAY, {
                                         error: 'Tipo de carta inválido.'
                                     });
                                     return;
                                 }
                                 break;
 
-                            case CONSTANTS.CARDSET.STEAL.DISCARD:
+                            case $.CARDSET.STEAL.DISCARD:
                                 //Make sure we have a specified card selected
                                 if (!data.hasOwnProperty('cardId')) {
-                                    socket.emit(CONSTANTS.GAME.PLAYER.PLAY, {
+                                    socket.emit($.GAME.PLAYER.PLAY, {
                                         error: 'Tipo de carta inválido.'
                                     });
                                     return;
@@ -761,7 +760,7 @@ module.exports = function (io, EK, $) {
 
                             default:
                                 //Make sure to let the player know to only play 1 card at a time if not playing a combo
-                                socket.emit(CONSTANTS.GAME.PLAYER.PLAY, {
+                                socket.emit($.GAME.PLAYER.PLAY, {
                                     error: 'Combo inválido.'
                                 });
                                 return;
@@ -769,10 +768,10 @@ module.exports = function (io, EK, $) {
                     } else {
                         var card = playedSet.cards[0];
                         switch (card.type) {
-                            case CONSTANTS.CARD.FAVOR:
+                            case $.CARD.FAVOR:
                                 //Only favor if we have someone to get a favor from
                                 if (!otherPlayerExists(data)) {
-                                    socket.emit(CONSTANTS.GAME.PLAYER.PLAY, {
+                                    socket.emit($.GAME.PLAYER.PLAY, {
                                         error: 'Jogador inválido selecionado.'
                                     });
                                     return;
@@ -783,7 +782,7 @@ module.exports = function (io, EK, $) {
 
                                 //Check if the other player has any cards
                                 if (otherPlayer && otherPlayer.hand.length < 1) {
-                                    socket.emit(CONSTANTS.GAME.PLAYER.PLAY, {
+                                    socket.emit($.GAME.PLAYER.PLAY, {
                                         error: 'Jogador não tem cartas na mão!'
                                     });
                                     return;
@@ -801,7 +800,7 @@ module.exports = function (io, EK, $) {
                     var replySet = playersHaveCancelamento(game) ? playedSet : null;
 
                     //Notify players that cards were played
-                    io.in(game.id).emit(CONSTANTS.GAME.PLAYER.PLAY, {
+                    io.in(game.id).emit($.GAME.PLAYER.PLAY, {
                         game: game.sanitize(),
                         player: player,
                         cards: cards,
@@ -814,7 +813,7 @@ module.exports = function (io, EK, $) {
                     checkCancelamentos(playedSet, data, socket, game);
                 }
             }
-        }); //End CONSTANTS.GAME.PLAYER.PLAY
+        }); //End $.GAME.PLAYER.PLAY
 
         /**
          * Cancelamento a played set.
@@ -826,10 +825,10 @@ module.exports = function (io, EK, $) {
          * 
          * @param {Object} data The data
          */
-        socket.on(CONSTANTS.GAME.PLAYER.NOPE, function (data) {
+        socket.on($.GAME.PLAYER.NOPE, function (data) {
             var game = EK.gameList[data.gameId];
             var user = EK.connectedUsers[socket.id];
-            if (game && game.status == CONSTANTS.GAME.STATUS.PLAYING) {
+            if (game && game.status == $.GAME.STATUS.PLAYING) {
                 var pendingSet = EK.pendingSets[data.setId];
 
                 if (pendingSet && !pendingSet.set.nopePlayed) {
@@ -837,10 +836,10 @@ module.exports = function (io, EK, $) {
                     var player = game.getPlayer(user);
 
                     //Check if player has a nope
-                    if (player && player.hasCardType(CONSTANTS.CARD.NOPE)) {
+                    if (player && player.hasCardType($.CARD.NOPE)) {
 
                         //Play the nope and set the pending set data
-                        var card = player.removeCardType(CONSTANTS.CARD.NOPE);
+                        var card = player.removeCardType($.CARD.NOPE);
                         var cardSet = new CardSet(player, [card]);
                         cardSet.effectPlayed = true;
                         game.discardPile.push(cardSet);
@@ -850,7 +849,7 @@ module.exports = function (io, EK, $) {
                         EK.pendingSets[data.setId].set.nopeAmount += 1;
 
                         //Notify players that a nope was played
-                        io.in(game.id).emit(CONSTANTS.GAME.PLAYER.NOPE, {
+                        io.in(game.id).emit($.GAME.PLAYER.NOPE, {
                             player: player,
                             cards: [card],
                             game: game.sanitize(),
@@ -858,13 +857,13 @@ module.exports = function (io, EK, $) {
                         });
 
                     } else {
-                        socket.emit(CONSTANTS.GAME.PLAYER.NOPE, {
+                        socket.emit($.GAME.PLAYER.NOPE, {
                             error: "Could not get player or you don't have a nope card!"
                         });
                     }
 
                 } else {
-                    socket.emit(CONSTANTS.GAME.PLAYER.NOPE, {
+                    socket.emit($.GAME.PLAYER.NOPE, {
                         error: 'Não é possível jogar cancelamentos agora!'
                     });
                 }
@@ -881,17 +880,17 @@ module.exports = function (io, EK, $) {
          * }
          * @param {Object} data The data
          */
-        socket.on(CONSTANTS.GAME.PLAYER.FAVOR, function (data) {
+        socket.on($.GAME.PLAYER.FAVOR, function (data) {
             //Get the game and check if it exists
             var game = EK.gameList[data.gameId];
 
-            if (game && game.status == CONSTANTS.GAME.STATUS.PLAYING) {
+            if (game && game.status == $.GAME.STATUS.PLAYING) {
                 var user = EK.connectedUsers[socket.id];
                 var player = game.getPlayer(user);
 
                 //Check if we have right player
                 if (!data.hasOwnProperty('to') || !EK.connectedUsers[data.to] || !game.getPlayer(EK.connectedUsers[data.to])) {
-                    socket.emit(CONSTANTS.GAME.PLAYER.FAVOR, {
+                    socket.emit($.GAME.PLAYER.FAVOR, {
                         error: 'Jogador inválido.'
                     });
                     return;
@@ -899,7 +898,7 @@ module.exports = function (io, EK, $) {
 
                 //Check if current user has card
                 if (!data.hasOwnProperty('card') || !game.getPlayer(user).hasCardWithId(data.card)) {
-                    socket.emit(CONSTANTS.GAME.PLAYER.FAVOR, {
+                    socket.emit($.GAME.PLAYER.FAVOR, {
                         error: 'Carta inválida.'
                     });
                     return;
@@ -925,7 +924,7 @@ module.exports = function (io, EK, $) {
                             game.getLastDiscardSet().effectPlayed = true;
 
                             //Notify players of the favor
-                            io.in(game.id).emit(CONSTANTS.GAME.PLAYER.FAVOR, {
+                            io.in(game.id).emit($.GAME.PLAYER.FAVOR, {
                                 success: true,
                                 to: other,
                                 from: user,
@@ -937,7 +936,7 @@ module.exports = function (io, EK, $) {
                 }
 
                 //If we hit here then favor did not go through
-                socket.emit(CONSTANTS.GAME.PLAYER.FAVOR, {
+                socket.emit($.GAME.PLAYER.FAVOR, {
                     error: 'Algo de errado aconteceu.'
                 });
             }
@@ -951,7 +950,7 @@ module.exports = function (io, EK, $) {
      * @param   {Object}   pendingSet The pending set object. Not to be confused with card set.
      */
     var processPendingSet = function (pendingSet) {
-        //Emit most errors out from this method because the errors should have been handled by CONSTANTS.GAME.PLAYER.PLAY socket handler
+        //Emit most errors out from this method because the errors should have been handled by $.GAME.PLAYER.PLAY socket handler
 
         //Get data needed
         var data = pendingSet.data;
@@ -980,7 +979,7 @@ module.exports = function (io, EK, $) {
         if (playedSet.cards.length > 1) {
             var steal = playedSet.canSteal();
             switch (steal) {
-                case CONSTANTS.CARDSET.STEAL.BLIND:
+                case $.CARDSET.STEAL.BLIND:
                     if (otherPlayerExists(data)) {
                         var other = EK.connectedUsers[data.to];
                         var otherPlayer = game.getPlayer(other);
@@ -992,20 +991,20 @@ module.exports = function (io, EK, $) {
                             player.addCard(card);
 
                             //Tell players that a steal occurred
-                            io.in(game.id).emit(CONSTANTS.GAME.PLAYER.STEAL, {
+                            io.in(game.id).emit($.GAME.PLAYER.STEAL, {
                                 to: other.id,
                                 from: socket.id,
                                 card: card,
                                 type: steal
                             });
                         } else {
-                            socket.emit(CONSTANTS.GAME.PLAYER.PLAY, {
+                            socket.emit($.GAME.PLAYER.PLAY, {
                                 error: 'Jogador não tem cartas na mão!'
                             });
                         }
                     }
                     break;
-                case CONSTANTS.CARDSET.STEAL.NAMED:
+                case $.CARDSET.STEAL.NAMED:
                     if (otherPlayerExists(data)) {
                         var other = EK.connectedUsers[data.to];
                         var otherPlayer = game.getPlayer(other);
@@ -1017,7 +1016,7 @@ module.exports = function (io, EK, $) {
                             player.addCard(card);
 
                             //Tell players that a steal occurred
-                            io.in(game.id).emit(CONSTANTS.GAME.PLAYER.STEAL, {
+                            io.in(game.id).emit($.GAME.PLAYER.STEAL, {
                                 success: true,
                                 to: other.id,
                                 from: socket.id,
@@ -1027,7 +1026,7 @@ module.exports = function (io, EK, $) {
                             });
                         } else {
                             //Tell players that stealing was unsuccessful
-                            io.in(game.id).emit(CONSTANTS.GAME.PLAYER.STEAL, {
+                            io.in(game.id).emit($.GAME.PLAYER.STEAL, {
                                 success: false,
                                 to: other.id,
                                 from: socket.id,
@@ -1038,7 +1037,7 @@ module.exports = function (io, EK, $) {
                     }
                     break;
 
-                case CONSTANTS.CARDSET.STEAL.DISCARD:
+                case $.CARDSET.STEAL.DISCARD:
                     //Get the data needed
                     var id = data.cardId;
                     var card = null;
@@ -1062,7 +1061,7 @@ module.exports = function (io, EK, $) {
                         player.addCard(card);
 
                         //Notify players of the steal
-                        io.in(game.id).emit(CONSTANTS.GAME.PLAYER.STEAL, {
+                        io.in(game.id).emit($.GAME.PLAYER.STEAL, {
                             success: true,
                             card: card,
                             type: steal,
@@ -1070,7 +1069,7 @@ module.exports = function (io, EK, $) {
                         });
                     } else {
                         //Tell them of the failure
-                        io.in(game.id).emit(CONSTANTS.GAME.PLAYER.STEAL, {
+                        io.in(game.id).emit($.GAME.PLAYER.STEAL, {
                             success: false,
                             type: steal,
                             from: socket.id
@@ -1087,14 +1086,14 @@ module.exports = function (io, EK, $) {
 
                 default:
                     //Make sure to let the player know to only play 1 card at a time if not playing a combo
-                    socket.emit(CONSTANTS.GAME.PLAYER.PLAY, {
+                    socket.emit($.GAME.PLAYER.PLAY, {
                         error: 'Combo inválido.'
                     });
             }
         } else {
             var card = playedSet.cards[0];
             switch (card.type) {
-                case CONSTANTS.CARD.ATTACK:
+                case $.CARD.ATTACK:
                     //Ataque the next person that is alive
                     var nextPlayer = game.getNextAlive(game.cUserIndex);
 
@@ -1107,7 +1106,7 @@ module.exports = function (io, EK, $) {
 
                     break;
 
-                case CONSTANTS.CARD.FAVOR:
+                case $.CARD.FAVOR:
                     if (otherPlayerExists(data)) {
                         var other = EK.connectedUsers[data.to];
                         var otherPlayer = game.getPlayer(other);
@@ -1119,13 +1118,13 @@ module.exports = function (io, EK, $) {
                         //Tough luck if a player gets this D:
                         //This can happen if the favor goes through even with nopes and the person has no card
                         if (otherPlayer && otherPlayer.hand.length < 1) {
-                            socket.emit(CONSTANTS.GAME.PLAYER.PLAY, {
+                            socket.emit($.GAME.PLAYER.PLAY, {
                                 error: 'Jogador não tem cartas na mão!'
                             });
                             playedSet.effectPlayed = true;
                         } else {
                             //Ask other player for favor
-                            io.in(game.id).emit(CONSTANTS.GAME.PLAYER.FAVOR, {
+                            io.in(game.id).emit($.GAME.PLAYER.FAVOR, {
                                 force: true,
                                 from: user,
                                 to: other
@@ -1134,7 +1133,7 @@ module.exports = function (io, EK, $) {
                     }
 
                     break;
-                case CONSTANTS.CARD.FUTURE:
+                case $.CARD.FUTURE:
 
                     //Get the first 3 cards on the top of the draw pile
                     var futureCards = [];
@@ -1145,13 +1144,13 @@ module.exports = function (io, EK, $) {
                     }
 
                     //Send the cards to the player
-                    socket.emit(CONSTANTS.GAME.PLAYER.FUTURE, {
+                    socket.emit($.GAME.PLAYER.FUTURE, {
                         cards: futureCards
                     });
 
                     break;
 
-                case CONSTANTS.CARD.SKIP:
+                case $.CARD.SKIP:
                     //Remove 1 draw amount as 1 skip = 1 draw amount
                     player.drawAmount -= 1;
 
@@ -1162,17 +1161,17 @@ module.exports = function (io, EK, $) {
 
                     break;
 
-                case CONSTANTS.CARD.SHUFFLE:
+                case $.CARD.SHUFFLE:
                     //Embaralhar the deck
                     game.shuffleDeck();
                     break;
-                case CONSTANTS.CARD.FAKENEWS:
-                    player.removeCardType(CONSTANTS.CARD.FAKENEWS);
-                    player.addCard(new Card(EK.generateRandomID(), 'Prevenção', CONSTANTS.CARD.PREVENTION, 0, 'Salvará o jogador que a possuir caso o mesmo encontre uma carta de contaminação.', 5, 10))
+                case $.CARD.FAKENEWS:
+                    player.removeCardType($.CARD.FAKENEWS);
+                    player.addCard(new Card(EK.generateRandomID(), 'Prevenção', $.CARD.PREVENTION, 0, 'Salvará o jogador que a possuir caso o mesmo encontre uma carta de contaminação.', 5, 10))
 
-                    io.emit(CONSTANTS.GAME.PLAYER.FAKENEWS, {});
+                    io.emit($.GAME.PLAYER.FAKENEWS, {});
                     break;
-                // case CONSTANTS.CARD.REVERSE:
+                // case $.CARD.REVERSE:
                 //     //Switch direction
                 //     game.direction *= -1;
                 //     break;
@@ -1183,7 +1182,7 @@ module.exports = function (io, EK, $) {
         game.updateDiscardSet(playedSet);
 
         //Notify players again that cards were played
-        /*io.in(game.id).emit(CONSTANTS.GAME.PLAYER.PLAY, {
+        /*io.in(game.id).emit($.GAME.PLAYER.PLAY, {
             player: player,
             cards: playedSet.cards
         });*/
@@ -1191,7 +1190,7 @@ module.exports = function (io, EK, $) {
         //Send user info about ending turn
         if (endTurn) {
             //Tell player to force end turn
-            socket.emit(CONSTANTS.GAME.PLAYER.ENDTURN, {
+            socket.emit($.GAME.PLAYER.ENDTURN, {
                 force: true,
                 player: player
             });
@@ -1241,7 +1240,7 @@ module.exports = function (io, EK, $) {
 
             //Notify players that set cannot be noped any more
             if (pending.data && pending.data.gameId) {
-                io.in(pending.data.gameId).emit(CONSTANTS.GAME.PLAYER.NOPE, {
+                io.in(pending.data.gameId).emit($.GAME.PLAYER.NOPE, {
                     set: pending.set,
                     canCancelamento: false
                 });
@@ -1260,11 +1259,16 @@ module.exports = function (io, EK, $) {
     var playersHaveCancelamento = function (game) {
         //Check if any players have a nope
         for (var i = 0; i < game.players.length; i++) {
+
             var player = game.players[i];
-            if (player.hasCardType(CONSTANTS.CARD.NOPE)) {
+
+            if (player.hasCardType($.CARD.NOPE)) {
+                console.log('tem sim');
                 return true;
             }
         }
+
+        console.log('ngm tem');
         return false;
     }
 
@@ -1327,7 +1331,7 @@ module.exports = function (io, EK, $) {
             game.removePlayer(user);
 
             //If game was in progress then put players cards in the discard pile
-            if (game.status === CONSTANTS.GAME.STATUS.PLAYING) {
+            if (game.status === $.GAME.STATUS.PLAYING) {
 
                 for (var key in player.hand) {
                     var card = player.hand[key];
@@ -1348,9 +1352,9 @@ module.exports = function (io, EK, $) {
                         game.cUserIndex = nextAlive;
 
                         //Send state information back
-                        io.in(game.id).emit(CONSTANTS.GAME.PLAYER.ENDTURN, {
+                        io.in(game.id).emit($.GAME.PLAYER.ENDTURN, {
                             player: player,
-                            state: CONSTANTS.GAME.PLAYER.TURN.DISCONNECT,
+                            state: $.GAME.PLAYER.TURN.DISCONNECT,
                             game: game.sanitize()
                         });
                     }
@@ -1365,12 +1369,12 @@ module.exports = function (io, EK, $) {
         socket.leave(user.currentRoom);
 
         //Join the lobby
-        user.currentRoom = CONSTANTS.LOBBY.ROOM;
-        socket.join(CONSTANTS.LOBBY.ROOM);
+        user.currentRoom = $.LOBBY.ROOM;
+        socket.join($.LOBBY.ROOM);
 
         //Check if we have to remove game
         if (game.players.length == 0) {
-            io.emit(CONSTANTS.GAME.REMOVED, {
+            io.emit($.GAME.REMOVED, {
                 id: game.id
             });
             EK.removeGame(game);
@@ -1389,12 +1393,12 @@ module.exports = function (io, EK, $) {
         if (game && game.stop()) {
 
             //Tell players
-            io.in(game.id).emit(CONSTANTS.GAME.STOP, {
+            io.in(game.id).emit($.GAME.STOP, {
                 game: game.sanitize()
             });
 
             //Tell lobby
-            io.emit(CONSTANTS.GAME.STOPPED, {
+            io.emit($.GAME.STOPPED, {
                 game: game.sanitize()
             });
         }
@@ -1416,7 +1420,7 @@ module.exports = function (io, EK, $) {
 
             //Tell everyone user won
             if (winner) {
-                io.in(game.id).emit(CONSTANTS.GAME.WIN, {
+                io.in(game.id).emit($.GAME.WIN, {
                     user: winner.user
                 });
             }

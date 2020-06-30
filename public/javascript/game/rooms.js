@@ -194,9 +194,9 @@ var GameRoom = {
                     }
 
                     if (this.shouldEnablePlayButton(EK)) {
-                        playButton.removeClass('disabled');
+                        playButton.prop("disabled", false);
                     } else {
-                        playButton.addClass('disabled');
+                        playButton.prop("disabled", true);
                     }
                 } else {
                     playButton.hide();

@@ -14,6 +14,8 @@
   <img width="125" src="./public/cards/19.jpg" />
   <img width="125" src="./public/cards/20.jpg" />
   <img width="125" src="./public/cards/21.jpg" />
+  <img width="125" src="./public/cards/22.jpg" />
+  <img width="125" src="./public/cards/23.jpg" />
 </div>
 
 ## REGRAS
@@ -55,6 +57,9 @@ Vence o jogo o último jogador que não for infectado. As cartas na Pilha de Com
 * **Prevenção**: Salvará o jogador que a possuir caso o mesmo encontre uma carta de contaminação.
 * **Prever**: Mostrará ao jogador que a utilizou as primeiras 3 cartas no topo do deck. É uma ação que pode ser anulada pela carta de Cancelamento.
 * **Pular**: Faz com que o jogador termine o seu turno sem precisar comprar uma carta do deck. É uma ação que pode ser anulada pela carta de Cancelamento.
+* **Troca-tudo:** CUIDADO! Ao usar essa carta, você troca todas as cartas da sua mão com um adversário a sua escolha.
+* **Lockdown:** Selecione um jogador para ficar em isolamento por uma partida. Esse jogador só poderá comprar cartas na sua vez.
+* **Fake News:** Informações falsas são problemáticas! Fake News são muito parecidas com cartas de Prevenção porém elas não te salvarão de uma Contaminação. Ao encontrá-la, você pode descartá-la para receber uma Prevenção de verdade. 
 
 ### COMBOS MANEIROS
 **DUAS CARTAS IGUAIS**: Jogar Pares de cartas iguais não se aplica somente às cartas Coringa (em que você pode roubar uma carta aleatória de

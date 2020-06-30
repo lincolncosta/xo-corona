@@ -15,6 +15,7 @@
 */
 
 var User = require('./user');
+var Card = require('./card');
 var Game = require('./game');
 var $ = require('./constants');
 var CardSet = require('./cardset');
@@ -28,17 +29,17 @@ TODO: Add reverse card
  * @param {Object} io The socket io
  * @param {Object} EK The game instance
  */
-module.exports = function(io, EK) {
-    
+module.exports = function (io, EK) {
+
     //************ Socket routes ************// 
-    
-    io.on('connection', function(socket) {
+
+    io.on('connection', function (socket) {
         /**
          * Disconnect from the server
          * @param {Object} data The data
          */
-        socket.on('disconnect', function(data) {
-            
+        socket.on('disconnect', function (data) {
+
             if (socket.id in EK.connectedUsers) {
                 //Get the user id and fetch their details
                 var user = EK.connectedUsers[socket.id];
@@ -48,7 +49,7 @@ module.exports = function(io, EK) {
                 io.emit($.USER.DISCONNECT, {
                     user: user
                 });
-                
+
                 //Notify room
                 if (user.currentRoom != $.LOBBY.ROOM) {
                     var game = EK.gameList[user.currentRoom];
@@ -68,7 +69,7 @@ module.exports = function(io, EK) {
                 EK.removeUser(user);
             }
         });
-        
+
         /**
          * Connect to lobby
          * Responds with connected users and game list.
@@ -79,7 +80,7 @@ module.exports = function(io, EK) {
          * 
          * @param {Object} data The data
          */
-        socket.on($.LOBBY.CONNECT, function(data) {
+        socket.on($.LOBBY.CONNECT, function (data) {
             var valid = (data && data.hasOwnProperty('nickname'));
 
             //Check for valid nickname
@@ -99,7 +100,7 @@ module.exports = function(io, EK) {
                 });
                 return;
             }
-            
+
             //Check if current user is already connected
             if (socket.id in EK.connectedUsers) {
                 socket.emit($.LOBBY.CONNECT, {
@@ -107,7 +108,7 @@ module.exports = function(io, EK) {
                 });
                 return;
             }
-            
+
             //Check if nickname is between 3 and 8 characters
             if (nickname.length < 3 || nickname.length > 10) {
                 socket.emit($.LOBBY.CONNECT, {
@@ -156,7 +157,7 @@ module.exports = function(io, EK) {
          * 
          * @param {Object} data The data
          */
-        socket.on($.GAME.CREATE, function(data) {
+        socket.on($.GAME.CREATE, function (data) {
             var title = data.title;
             if (!title || title.length <= 0 || title.length >= 30) {
                 socket.emit($.GAME.CREATE, {
@@ -164,7 +165,7 @@ module.exports = function(io, EK) {
                 });
                 return;
             }
-            
+
             //Make sure title is unique
             for (var key in EK.gameList) {
                 var game = EK.gameList[key];
@@ -175,7 +176,7 @@ module.exports = function(io, EK) {
                     return;
                 }
             }
-            
+
             //Make sure user is in lobby
             var user = EK.connectedUsers[socket.id];
             if (user.currentRoom != $.LOBBY.ROOM) {
@@ -201,9 +202,9 @@ module.exports = function(io, EK) {
                 });
                 return;
             }
-            
+
             console.log('Jogo criado: ' + gameId + ' ' + title);
-            
+
             EK.addGame(game);
 
             //Tell everyone a game was created
@@ -228,7 +229,7 @@ module.exports = function(io, EK) {
          * 
          * @param {Object} data The data
          */
-        socket.on($.GAME.JOIN, function(data) {
+        socket.on($.GAME.JOIN, function (data) {
             //Get the game and check if it exists
             var game = EK.gameList[data.gameId];
             var user = EK.connectedUsers[socket.id];
@@ -249,7 +250,7 @@ module.exports = function(io, EK) {
             }
 
             var currentPlayer = game.getPlayer(user);
-            
+
             //Notify the players in the game that user has joined
             socket.broadcast.in(game.id).emit($.GAME.PLAYER.CONNECT, {
                 game: game.sanitize(),
@@ -261,7 +262,7 @@ module.exports = function(io, EK) {
                 success: 'Conectado ao jogo com sucesso!',
                 game: game.sanitize()
             });
-            
+
             //Send data to everyone
             io.emit($.GAME.UPDATE, {
                 game: game.sanitize()
@@ -278,7 +279,7 @@ module.exports = function(io, EK) {
          * 
          * @param {Object} data The data
          */
-        socket.on($.GAME.LEAVE, function(data) {
+        socket.on($.GAME.LEAVE, function (data) {
             //Get the game and check if it exists
             var game = EK.gameList[data.gameId];
             var user = EK.connectedUsers[socket.id];
@@ -293,10 +294,10 @@ module.exports = function(io, EK) {
             if (game.players.length < game.minPlayers) {
                 stopGame(io, data);
             }
-            
+
             //Get the player
             var player = game.getPlayer(user);
-            
+
             //Remove the user from the game
             removeUserFromGame(user, game, io, socket);
 
@@ -305,11 +306,11 @@ module.exports = function(io, EK) {
                 player: player,
                 game: game.sanitize()
             });
-            
+
             socket.emit($.GAME.LEAVE, {
                 success: 'Saiu do jogo.'
             });
-            
+
             io.emit($.GAME.UPDATE, {
                 game: game.sanitize()
             });
@@ -327,7 +328,7 @@ module.exports = function(io, EK) {
          * 
          * @param {Object} data The data
          */
-        socket.on($.GAME.START, function(data) {
+        socket.on($.GAME.START, function (data) {
             var game = EK.gameList[data.gameId];
 
             if (game && game.status == $.GAME.STATUS.WAITING) {
@@ -338,12 +339,12 @@ module.exports = function(io, EK) {
                         io.in(game.id).emit($.GAME.START, {
                             game: game.sanitize()
                         });
-                        
+
                         //Message lobby
-                        io.emit($.GAME.STARTED, { 
-                            game: game.sanitize() 
+                        io.emit($.GAME.STARTED, {
+                            game: game.sanitize()
                         });
-                        
+
                         console.log('Jogo iniciado: ' + game.id);
                     } else {
                         socket.emit($.GAME.START, {
@@ -364,7 +365,7 @@ module.exports = function(io, EK) {
          * 
          * @param {Object} data The data
          */
-        socket.on($.GAME.STOP, function(data) {
+        socket.on($.GAME.STOP, function (data) {
             stopGame(io, data);
         });
 
@@ -377,7 +378,7 @@ module.exports = function(io, EK) {
          * 
          * @param {Object} data The data
          */
-        socket.on($.GAME.PLAYER.READY, function(data) {
+        socket.on($.GAME.PLAYER.READY, function (data) {
             var game = EK.gameList[data.gameId];
 
             //We can only ready up if the game state is waiting
@@ -401,14 +402,14 @@ module.exports = function(io, EK) {
          * 
          * @param {Object} data The data
          */
-        socket.on($.GAME.PLAYER.HAND, function(data) {
+        socket.on($.GAME.PLAYER.HAND, function (data) {
             var game = EK.gameList[data.gameId];
 
             //We can only get hand if game is playing
             if (game && game.status == $.GAME.STATUS.PLAYING) {
                 var user = EK.connectedUsers[socket.id];
                 var player = game.getPlayer(user);
-                
+
                 //Return the player hand
                 if (player) {
                     socket.emit($.GAME.PLAYER.HAND, {
@@ -418,7 +419,7 @@ module.exports = function(io, EK) {
                 }
             }
         });
-        
+
         /**
          * Get the game discard pile
          * 
@@ -428,7 +429,7 @@ module.exports = function(io, EK) {
          * 
          * @param {Object} data The data
          */
-        socket.on($.GAME.DISCARDPILE, function(data) {
+        socket.on($.GAME.DISCARDPILE, function (data) {
             var game = EK.gameList[data.gameId];
 
             //We can only get discard pile if game is playing
@@ -436,7 +437,7 @@ module.exports = function(io, EK) {
                 //Make sure user is in the game
                 var user = EK.connectedUsers[socket.id];
                 if (!game.getPlayer(user)) return;
-                
+
                 socket.emit($.GAME.DISCARDPILE, {
                     cards: game.getDiscardPile()
                 });
@@ -447,7 +448,7 @@ module.exports = function(io, EK) {
          * End current players turn
          * @param {Object} data The data
          */
-        socket.on($.GAME.PLAYER.ENDTURN, function(data) {
+        socket.on($.GAME.PLAYER.ENDTURN, function (data) {
             //Get the game and check if it exists
             var game = EK.gameList[data.gameId];
 
@@ -459,7 +460,7 @@ module.exports = function(io, EK) {
                 if (game.cUserIndex == game.playerIndexForUser(user)) {
                     var state = $.GAME.PLAYER.TURN.SURVIVED;
                     var player = game.getPlayer(user);
-                    
+
                     //Check if effects have been played
                     if (!effectsPlayed(game, player)) {
                         socket.emit($.GAME.PLAYER.ENDTURN, {
@@ -467,7 +468,7 @@ module.exports = function(io, EK) {
                         });
                         return;
                     }
-                    
+
                     if (player.drawAmount >= 1) {
                         //Make player draw a card and if it is an explode then remove a defuse
                         //If player has no defuse then player is out
@@ -477,7 +478,7 @@ module.exports = function(io, EK) {
                             cards: drawn,
                             hand: player.hand
                         });
-                        
+
                         //Tell other players that player drew a card
                         socket.broadcast.in(game.id).emit($.GAME.PLAYER.DRAW, {
                             game: game.sanitize(),
@@ -486,19 +487,19 @@ module.exports = function(io, EK) {
                     }
 
                     //Use while loop incase player picks up 2 explodes
-                    while (player.hasCardType($.CARD.INFECTION)) {                    
+                    while (player.hasCardType($.CARD.INFECTION)) {
                         if (player.hasCardType($.CARD.PREVENTION)) {
-                            //Remove deufse and add it to the discard pile
+                            //Remove defuse and add it to the discard pile
                             var defuse = player.removeCardType($.CARD.PREVENTION);
                             var set = new CardSet(player, [defuse]);
                             set.effectPlayed = true;
                             game.discardPile.push(set);
-                            
+
                             //Add the bomb back into the draw pile at a random position
                             var explode = player.removeCardType($.CARD.INFECTION);
                             var index = Math.floor(Math.random() * (game.drawPile.length));
                             game.drawPile.splice(index, 0, explode);
-                            
+
                             state = $.GAME.PLAYER.TURN.PREVENTED;
                         } else {
                             //Player exploded
@@ -509,19 +510,19 @@ module.exports = function(io, EK) {
 
                     //Check for a winner
                     if (!checkGameWin(game)) {
-                        
+
                         //Check if player defused or exploded, if so then they have to end their turn no matter the amount of draws remaining
-                        if (!(state === $.GAME.PLAYER.TURN.SURVIVED)) player.drawAmount = 1; 
-                        
+                        if (!(state === $.GAME.PLAYER.TURN.SURVIVED)) player.drawAmount = 1;
+
                         player.drawAmount -= 1;
-                        
+
                         if (player.drawAmount < 1) {
                             //Next players turn
                             var nextAlive = game.getNextAliveIndex(game.cUserIndex);
                             if (nextAlive != game.cUserIndex) {
                                 game.cUserIndex = nextAlive;
                             }
-                            
+
                             //Reset player draw amount (dead = 0, alive = 1)
                             player.drawAmount = Number(player.alive);
 
@@ -536,7 +537,95 @@ module.exports = function(io, EK) {
                 }
             }
         });
-        
+
+        socket.on($.GAME.PLAYER.CHANGE, function (data) {
+            //Get the game and check if it exists
+            var game = EK.gameList[data.gameId];
+
+            if (game && game.status == $.GAME.STATUS.PLAYING) {
+
+                var user = EK.connectedUsers[socket.id];
+                var player = game.getPlayer(user);
+
+                var other = EK.connectedUsers[data.to];
+                var otherPlayer = game.getPlayer(other);
+
+                //Check if we have right player
+                if (!data.hasOwnProperty('to') || !EK.connectedUsers[data.to] || !game.getPlayer(EK.connectedUsers[data.to])) {
+                    socket.emit($.GAME.PLAYER.CHANGE, {
+                        error: 'Jogador inválido.'
+                    });
+                    return;
+                }
+
+                var change = player.removeCardType($.CARD.CHANGE);
+                var set = new CardSet(player, [change]);
+
+                auxHand = otherPlayer.hand;
+                otherPlayer.hand = player.hand;
+                player.hand = auxHand;
+
+                set.effectPlayed = true;
+                game.discardPile.push(set);
+
+                io.in(game.id).emit($.GAME.PLAYER.CHANGE, {
+                    success: true,
+                    to: otherPlayer,
+                    from: player
+                });
+
+                socket.emit($.GAME.PLAYER.ENDTURN, {
+                    force: true,
+                    player: player
+                });
+
+                return;
+            }
+        })
+
+        socket.on($.GAME.PLAYER.LOCKDOWN, function (data) {
+            //Get the game and check if it exists
+            var game = EK.gameList[data.gameId];
+
+            if (game && game.status == $.GAME.STATUS.PLAYING) {
+
+                var user = EK.connectedUsers[socket.id];
+                var player = game.getPlayer(user);
+
+                var other = EK.connectedUsers[data.to];
+                var otherPlayer = game.getPlayer(other);
+
+                //Check if we have right player
+                if (!data.hasOwnProperty('to') || !EK.connectedUsers[data.to] || !game.getPlayer(EK.connectedUsers[data.to])) {
+                    socket.emit($.GAME.PLAYER.LOCKDOWN, {
+                        error: 'Jogador inválido.'
+                    });
+                    return;
+                }
+
+                var lockdown = player.removeCardType($.CARD.LOCKDOWN);
+                var set = new CardSet(player, [lockdown]);
+                set.effectPlayed = true;
+                game.discardPile.push(set);
+
+                otherPlayer.lockdown = true;
+
+                // Update player's hand
+                socket.emit($.GAME.PLAYER.HAND, {
+                    player: game.getPlayer(user),
+                    hand: game.getPlayer(user).hand
+                });
+
+                io.in(game.id).emit($.GAME.PLAYER.LOCKDOWN, {
+                    success: true,
+                    to: otherPlayer,
+                    from: player
+                });
+
+                return;
+            }
+        })
+
         /**
          * Play cards.
          * 
@@ -550,14 +639,14 @@ module.exports = function(io, EK) {
          * 
          * @param {Object} data The data
          */
-        socket.on($.GAME.PLAYER.PLAY, function(data) {
+        socket.on($.GAME.PLAYER.PLAY, function (data) {
             var game = EK.gameList[data.gameId];
             if (game && game.status == $.GAME.STATUS.PLAYING) {
                 //Check if it is the current users turn
                 var user = EK.connectedUsers[socket.id];
                 if (game.cUserIndex == game.playerIndexForUser(user) && data.cards.length > 0) {
                     var player = game.getPlayer(user);
-                    
+
                     //Check if player is alive
                     if (!player.alive) {
                         socket.emit($.GAME.PLAYER.PLAY, {
@@ -565,7 +654,7 @@ module.exports = function(io, EK) {
                         });
                         return;
                     }
-                    
+
                     //Check if effects have been played
                     if (!effectsPlayed(game, player)) {
                         socket.emit($.GAME.PLAYER.PLAY, {
@@ -573,7 +662,7 @@ module.exports = function(io, EK) {
                         });
                         return;
                     }
-                    
+
                     //Check if the player has the cards
                     if (!player.hasCardsWithId(data.cards)) {
                         socket.emit($.GAME.PLAYER.PLAY, {
@@ -581,11 +670,11 @@ module.exports = function(io, EK) {
                         });
                         return;
                     }
-                    
-                    
+
+
                     //Get cards from the players hand
                     var cards = player.getCardsWithId(data.cards);
-                    
+
                     //Disallow playing the defuse, regular or nope alone
                     if (cards.length == 1) {
                         if (cards[0].type === $.CARD.PREVENTION || cards[0].type === $.CARD.REGULAR || cards[0].type === $.CARD.NOPE) {
@@ -594,31 +683,31 @@ module.exports = function(io, EK) {
                             });
                             return;
                         }
-                        
+
                         if (cards[0].type === $.CARD.INFECTION) {
                             socket.emit($.GAME.PLAYER.PLAY, {
                                 error: 'Não é possível jogar Contaminação! E como você conseguiu essa carta, malandro(a)?'
                             });
                             return;
                         }
-                    } 
-                    
+                    }
+
                     //Add the cards to a set
                     var playedSet = new CardSet(player, cards);
-                    
+
                     //Whether the other specified player exists
-                    var otherPlayerExists = function(data) {
+                    var otherPlayerExists = function (data) {
                         var user = EK.connectedUsers[data.to];
                         var player = game.getPlayer(user);
-                        
+
                         //Make sure we have a person 'to' do action on and that we're not doing the action to ourself and that the player is alive
                         return data.hasOwnProperty('to') && user && EK.connectedUsers[socket.id] != user && player && player.alive;
                     }
-                    
+
                     //Check for combos
                     if (playedSet.cards.length > 1) {
                         var steal = playedSet.canSteal();
-                        switch(steal) {
+                        switch (steal) {
                             case $.CARDSET.STEAL.BLIND:
                                 //Only steal if we have someone to steal from
                                 if (!otherPlayerExists(data)) {
@@ -627,10 +716,10 @@ module.exports = function(io, EK) {
                                     });
                                     return;
                                 }
-                                
+
                                 var other = EK.connectedUsers[data.to];
                                 var otherPlayer = game.getPlayer(other);
-                                
+
                                 //Check if the other player has any cards
                                 if (otherPlayer && otherPlayer.hand.length < 1) {
                                     socket.emit($.GAME.PLAYER.PLAY, {
@@ -638,7 +727,7 @@ module.exports = function(io, EK) {
                                     });
                                     return;
                                 }
-                                
+
                                 break;
                             case $.CARDSET.STEAL.NAMED:
                                 //Only steal if we have someone to steal from
@@ -665,7 +754,7 @@ module.exports = function(io, EK) {
                                         error: 'Tipo de carta inválido.'
                                     });
                                     return;
-                                }  
+                                }
                                 break;
 
                             default:
@@ -677,7 +766,7 @@ module.exports = function(io, EK) {
                         }
                     } else {
                         var card = playedSet.cards[0];
-                        switch (card.type) {    
+                        switch (card.type) {
                             case $.CARD.FAVOR:
                                 //Only favor if we have someone to get a favor from
                                 if (!otherPlayerExists(data)) {
@@ -686,10 +775,10 @@ module.exports = function(io, EK) {
                                     });
                                     return;
                                 }
-                                
+
                                 var other = EK.connectedUsers[data.to];
                                 var otherPlayer = game.getPlayer(other);
-                                
+
                                 //Check if the other player has any cards
                                 if (otherPlayer && otherPlayer.hand.length < 1) {
                                     socket.emit($.GAME.PLAYER.PLAY, {
@@ -697,18 +786,18 @@ module.exports = function(io, EK) {
                                     });
                                     return;
                                 }
-                                
+
                                 break;
                         }
                     }
-                    
+
                     //Remove the cards played and put them in the discard pile
                     player.removeCards(cards);
                     game.discardPile.push(playedSet);
-                    
+
                     //Don't send the set details if players have no nopes
                     var replySet = playersHaveCancelamento(game) ? playedSet : null;
-                    
+
                     //Notify players that cards were played
                     io.in(game.id).emit($.GAME.PLAYER.PLAY, {
                         game: game.sanitize(),
@@ -717,14 +806,14 @@ module.exports = function(io, EK) {
                         set: replySet,
                         to: data.to
                     });
-                    
+
                     //Wait for nope requests
                     playedSet.nopePlayed = true;
                     checkCancelamentos(playedSet, data, socket, game);
                 }
             }
         }); //End $.GAME.PLAYER.PLAY
-        
+
         /**
          * Cancelamento a played set.
          * 
@@ -735,29 +824,29 @@ module.exports = function(io, EK) {
          * 
          * @param {Object} data The data
          */
-        socket.on($.GAME.PLAYER.NOPE, function(data) {
+        socket.on($.GAME.PLAYER.NOPE, function (data) {
             var game = EK.gameList[data.gameId];
             var user = EK.connectedUsers[socket.id];
             if (game && game.status == $.GAME.STATUS.PLAYING) {
                 var pendingSet = EK.pendingSets[data.setId];
-                
+
                 if (pendingSet && !pendingSet.set.nopePlayed) {
-                    
+
                     var player = game.getPlayer(user);
-                    
+
                     //Check if player has a nope
                     if (player && player.hasCardType($.CARD.NOPE)) {
-                        
+
                         //Play the nope and set the pending set data
                         var card = player.removeCardType($.CARD.NOPE);
                         var cardSet = new CardSet(player, [card]);
                         cardSet.effectPlayed = true;
                         game.discardPile.push(cardSet);
-                        
+
                         //Set the nope played and amount
                         EK.pendingSets[data.setId].set.nopePlayed = true;
                         EK.pendingSets[data.setId].set.nopeAmount += 1;
-                    
+
                         //Notify players that a nope was played
                         io.in(game.id).emit($.GAME.PLAYER.NOPE, {
                             player: player,
@@ -765,21 +854,21 @@ module.exports = function(io, EK) {
                             game: game.sanitize(),
                             set: EK.pendingSets[data.setId].set
                         });
-                        
+
                     } else {
                         socket.emit($.GAME.PLAYER.NOPE, {
-                        error: "Could not get player or you don't have a nope card!"
+                            error: "Could not get player or you don't have a nope card!"
                         });
                     }
-                    
+
                 } else {
                     socket.emit($.GAME.PLAYER.NOPE, {
-                        error: 'Could not play nope at this time!'
+                        error: 'Não é possível jogar cancelamentos agora!'
                     });
                 }
             }
         });
-        
+
         /**
          * Give a favor to a player
          * 
@@ -790,14 +879,14 @@ module.exports = function(io, EK) {
          * }
          * @param {Object} data The data
          */
-        socket.on($.GAME.PLAYER.FAVOR, function(data){
+        socket.on($.GAME.PLAYER.FAVOR, function (data) {
             //Get the game and check if it exists
             var game = EK.gameList[data.gameId];
 
             if (game && game.status == $.GAME.STATUS.PLAYING) {
                 var user = EK.connectedUsers[socket.id];
                 var player = game.getPlayer(user);
-                
+
                 //Check if we have right player
                 if (!data.hasOwnProperty('to') || !EK.connectedUsers[data.to] || !game.getPlayer(EK.connectedUsers[data.to])) {
                     socket.emit($.GAME.PLAYER.FAVOR, {
@@ -805,7 +894,7 @@ module.exports = function(io, EK) {
                     });
                     return;
                 }
-                
+
                 //Check if current user has card
                 if (!data.hasOwnProperty('card') || !game.getPlayer(user).hasCardWithId(data.card)) {
                     socket.emit($.GAME.PLAYER.FAVOR, {
@@ -813,16 +902,16 @@ module.exports = function(io, EK) {
                     });
                     return;
                 }
-                
+
                 //Check if the other person is currently the one doing their turn
                 var other = EK.connectedUsers[data.to];
                 var otherPlayer = game.getPlayer(other);
-                
+
                 if (otherPlayer === game.playerForCurrentIndex()) {
-                    
+
                     //Check if the favor is still possible
                     if (!effectsPlayed(game, otherPlayer)) {
-                        
+
                         //Make sure the last set is still not pending
                         var lastSet = game.getLastDiscardSet();
                         if (!EK.pendingSets[lastSet.id]) {
@@ -844,7 +933,7 @@ module.exports = function(io, EK) {
                         }
                     }
                 }
-                
+
                 //If we hit here then favor did not go through
                 socket.emit($.GAME.PLAYER.FAVOR, {
                     error: 'Algo de errado aconteceu.'
@@ -852,16 +941,16 @@ module.exports = function(io, EK) {
             }
         });
     });
-    
+
     //************ Socket methods ************//
-    
+
     /**
      * Process the actions of a pending set
      * @param   {Object}   pendingSet The pending set object. Not to be confused with card set.
      */
-    var processPendingSet = function(pendingSet) {
+    var processPendingSet = function (pendingSet) {
         //Emit most errors out from this method because the errors should have been handled by $.GAME.PLAYER.PLAY socket handler
-        
+
         //Get data needed
         var data = pendingSet.data;
         var playedSet = pendingSet.set;
@@ -869,31 +958,31 @@ module.exports = function(io, EK) {
         var game = EK.gameList[pendingSet.data.gameId];
         var user = EK.connectedUsers[socket.id];
         var player = game.getPlayer(user);
-        
+
         //Keep track if we have to force user to end turn
         var endTurn = false;
-        
+
         //Whether the other specified player exists
-        var otherPlayerExists = function(data) {
+        var otherPlayerExists = function (data) {
             var user = EK.connectedUsers[data.to];
             var player = game.getPlayer(user);
 
             //Make sure we have a person 'to' do action on and that we're not doing the action to ourself and that the player is alive
             return data.hasOwnProperty('to') && user && EK.connectedUsers[socket.id] != user && player && player.alive;
         }
-        
+
         //Set the effect to played by default
         playedSet.effectPlayed = true;
 
         //Check for combos
         if (playedSet.cards.length > 1) {
             var steal = playedSet.canSteal();
-            switch(steal) {
+            switch (steal) {
                 case $.CARDSET.STEAL.BLIND:
                     if (otherPlayerExists(data)) {
                         var other = EK.connectedUsers[data.to];
                         var otherPlayer = game.getPlayer(other);
-                        
+
                         if (otherPlayer.hand.length > 0) {
                             //Remove a random card from the other players hand and add it to the current player
                             var card = otherPlayer.getRandomCard();
@@ -932,7 +1021,7 @@ module.exports = function(io, EK) {
                                 from: socket.id,
                                 cardType: type,
                                 card: card.id,
-                                type: steal  
+                                type: steal
                             });
                         } else {
                             //Tell players that stealing was unsuccessful
@@ -960,7 +1049,7 @@ module.exports = function(io, EK) {
                             //Get the card and remove the set if it's empty
                             card = set.removeCardWithId(id);
                             if (card) {
-                                currentKey = key; 
+                                currentKey = key;
                                 break;
                             }
                         }
@@ -1030,7 +1119,7 @@ module.exports = function(io, EK) {
                         if (otherPlayer && otherPlayer.hand.length < 1) {
                             socket.emit($.GAME.PLAYER.PLAY, {
                                 error: 'Jogador não tem cartas na mão!'
-                            });                     
+                            });
                             playedSet.effectPlayed = true;
                         } else {
                             //Ask other player for favor
@@ -1047,8 +1136,7 @@ module.exports = function(io, EK) {
 
                     //Get the first 3 cards on the top of the draw pile
                     var futureCards = [];
-                    for (var i = 0; i < 3; i++)
-                    {
+                    for (var i = 0; i < 3; i++) {
                         if (game.drawPile[i]) {
                             futureCards.push(game.drawPile[i]);
                         }
@@ -1069,12 +1157,18 @@ module.exports = function(io, EK) {
                     if (player.drawAmount < 1) {
                         endTurn = true;
                     }
-                    
+
                     break;
 
                 case $.CARD.SHUFFLE:
                     //Embaralhar the deck
                     game.shuffleDeck();
+                    break;
+                case $.CARD.FAKENEWS:
+                    player.removeCardType($.CARD.FAKENEWS);
+                    player.addCard(new Card(EK.generateRandomID(), 'Prevenção', $.CARD.PREVENTION, 0, 'Salvará o jogador que a possuir caso o mesmo encontre uma carta de contaminação.', 5, 10))
+
+                    io.emit($.GAME.PLAYER.FAKENEWS, {});
                     break;
                 // case $.CARD.REVERSE:
                 //     //Switch direction
@@ -1085,7 +1179,7 @@ module.exports = function(io, EK) {
 
         //Update the discard pile
         game.updateDiscardSet(playedSet);
-        
+
         //Notify players again that cards were played
         /*io.in(game.id).emit($.GAME.PLAYER.PLAY, {
             player: player,
@@ -1101,7 +1195,7 @@ module.exports = function(io, EK) {
             });
         }
     }
-    
+
     /**
      * Check if any nopes were played.
      * If a nope was played then extend timer by game nope time.
@@ -1111,38 +1205,38 @@ module.exports = function(io, EK) {
      * @param {Object} socket The socket      
      * @param {Object} game The game    
      */
-    var checkCancelamentos = function(playedSet, data, socket, game) {
-        
+    var checkCancelamentos = function (playedSet, data, socket, game) {
+
         //Check if the set is pending
         var pending = EK.pendingSets[playedSet.id];
         if (!pending) {
             EK.addPendingSet(playedSet, data, socket);
             pending = EK.pendingSets[playedSet.id];
         }
-        
+
         //Set the sets nopePlayed to false as no other player can nope
-        if (!playersHaveCancelamento(game)) {     
+        if (!playersHaveCancelamento(game)) {
             pending.set.nopePlayed = false;
         }
-        
+
         if (pending.set.nopePlayed) {
             //Poll the set
             EK.pendingSets[playedSet.id].set.nopePlayed = false;
-            setTimeout(function() {
+            setTimeout(function () {
                 checkCancelamentos(pending.set, data, socket, game);
             }, game.nopeTime);
         } else {
-            
+
             //If there is an even amount of nopes played then we can process
             if (pending.set.nopeAmount % 2 == 0) {
                 processPendingSet(pending);
             } else {
                 pending.set.effectPlayed = true;
-                
+
                 //Update the discard pile
                 game.updateDiscardSet(pending.set);
             }
-            
+
             //Notify players that set cannot be noped any more
             if (pending.data && pending.data.gameId) {
                 io.in(pending.data.gameId).emit($.GAME.PLAYER.NOPE, {
@@ -1150,35 +1244,40 @@ module.exports = function(io, EK) {
                     canCancelamento: false
                 });
             }
-            
+
             //Remove the set from pending
             EK.removePendingSet(pending.set);
         }
     }
-    
+
     /**
      * Check if players in a game have nopes
      * @param   {Object} game The game
      * @returns {Boolean}  Whether any player has a nope
      */
-    var playersHaveCancelamento = function(game) {
+    var playersHaveCancelamento = function (game) {
         //Check if any players have a nope
         for (var i = 0; i < game.players.length; i++) {
+
             var player = game.players[i];
+
             if (player.hasCardType($.CARD.NOPE)) {
+                console.log('tem sim');
                 return true;
             }
         }
+
+        console.log('ngm tem');
         return false;
     }
-    
+
     /**
      * Whether the last card sets effects were played
      * @param   {Object}   game   The game
      * @param   {Object} player The player
      * @returns {Boolean}  True if the last sets effects were played else false
      */
-    var effectsPlayed = function(game, player) {
+    var effectsPlayed = function (game, player) {
         //Check for last set effect played
         if (game.discardPile.length > 0) {
             var lastSet = game.getLastDiscardSet();
@@ -1186,10 +1285,10 @@ module.exports = function(io, EK) {
                 return lastSet.effectPlayed;
             }
         }
-        
+
         return true;
     }
-    
+
     /**
      * Add user to a game
      * @param   {Object}  user The user
@@ -1213,7 +1312,7 @@ module.exports = function(io, EK) {
 
         return true;
     }
-    
+
     /**
      * Remove user from a game
      * @param {Object}   user     The user
@@ -1224,26 +1323,26 @@ module.exports = function(io, EK) {
     var removeUserFromGame = function (user, game, io, socket) {
         var player = game.getPlayer(user);
         var currentPlayer = game.playerForCurrentIndex();
-        
-        if (player) {  
-            
+
+        if (player) {
+
             //Remove the user from the game
             game.removePlayer(user);
-            
+
             //If game was in progress then put players cards in the discard pile
             if (game.status === $.GAME.STATUS.PLAYING) {
-                
+
                 for (var key in player.hand) {
                     var card = player.hand[key];
                     var set = new CardSet(player, [card]);
                     game.discardPile.push(set);
                 }
-                
+
                 player.hand = [];
-                
+
                 //Check for a winner
                 if (!checkGameWin(game)) {
-                    
+
                     //Check if the player is the current one drawing, if so determine winner or force next turn
                     if (player === currentPlayer) {
                         //TODO: When last player leaves the next alive player is not set 
@@ -1258,62 +1357,59 @@ module.exports = function(io, EK) {
                             game: game.sanitize()
                         });
                     }
-                    
+
                 }
-            
+
             }
-            
+
         }
-        
+
         //Leave old room
         socket.leave(user.currentRoom);
 
         //Join the lobby
         user.currentRoom = $.LOBBY.ROOM;
         socket.join($.LOBBY.ROOM);
-        
+
         //Check if we have to remove game
         if (game.players.length == 0) {
             io.emit($.GAME.REMOVED, {
                 id: game.id
             });
             EK.removeGame(game);
-            console.log('Jogo removido: ' + game.id);
             return;
         }
     }
-    
+
     /**
      * Stop the current game
      * @param {Object} io   The io
      * @param {Object} data The data
      */
-    var stopGame = function(io, data) {
+    var stopGame = function (io, data) {
         var game = EK.gameList[data.gameId];
-        
+
         if (game && game.stop()) {
-            
+
             //Tell players
             io.in(game.id).emit($.GAME.STOP, {
                 game: game.sanitize()
             });
-            
+
             //Tell lobby
             io.emit($.GAME.STOPPED, {
                 game: game.sanitize()
             });
-            
-            console.log('Jogo pausado: ' + game.id);
         }
     }
-    
+
     /**
      * Check if there is a winner in a game.
      * If there is a winner then a message is emitted and the game is stopped.
      * @param   {Object}  game The game
      * @returns {Boolean} Whether the game has a winner
      */
-    var checkGameWin = function(game) {
+    var checkGameWin = function (game) {
         if (game.playerAliveCount() < 2) {
             var winner = null;
             for (var key in game.players) {
@@ -1330,10 +1426,10 @@ module.exports = function(io, EK) {
 
             //Stop the game
             stopGame(io, { gameId: game.id })
-            
+
             return true;
         }
-        
+
         return false;
     }
 }

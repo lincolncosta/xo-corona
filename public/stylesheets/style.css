@@ -329,12 +329,6 @@ html, body {
     background: none;
 }
 
-#cardDisplay {
-    overflow-x: scroll;
-    width: 100%;
-    white-space: nowrap;
-}
-
 #playGameButton {
     margin-bottom: 10px;
 }

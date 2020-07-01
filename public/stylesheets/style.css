@@ -17,6 +17,11 @@ html, body {
     overflow: hidden;
 }
 
+#cardDisplay {
+    position: relative;
+    white-space: nowrap;
+}
+
 @media (max-width:641px) {
     /* small devices */
     html, body, .container-fluid, .room {
@@ -251,7 +256,7 @@ html, body {
 }
 
 #game #playArea {
-    height: calc(100% - 305px);
+    height: calc(100% - 330px);
     position: relative;
 }
 
@@ -458,7 +463,7 @@ html, body {
 }
 
 #showDiscardButton {
-    top: 0px !important;
+    top: 25px !important;
     right: 0px;
     position: absolute;
     margin: 10px;

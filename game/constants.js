@@ -45,7 +45,7 @@ var $ = {
             TURN: {
                 INVALID: 'invalid',
                 PREVENTED: 'prevented',
-                INFECTED: 'infected',
+                CONTAMINED: 'contamined',
                 SURVIVED: 'survived',
                 DISCONNECT: 'disconnected'
             },

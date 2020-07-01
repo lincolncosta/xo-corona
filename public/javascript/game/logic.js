@@ -593,12 +593,17 @@ jQuery(document).ready(function ($) {
             io.emit($C.GAME.DISCARDPILE, { gameId: game.id });
 
             var message = null;
+            var hasFakeNewsInHand = main.gameData.hasCardTypeInHand($C.CARD.FAKENEWS);
             switch (data.state) {
                 case $C.GAME.PLAYER.TURN.PREVENTED:
                     message = user.name + " foi salvo por uma Prevenção!";
                     break;
                 case $C.GAME.PLAYER.TURN.CONTAMINED:
-                    message = user.name + " foi contaminado!";
+                    if (hasFakeNewsInHand) {
+                        message = user.name + " foi contaminado enquanto tinha uma Fake News em mãos. Notícias falsas não te manterão seguro!";
+                    } else {
+                        message = user.name + " foi contaminado!";
+                    }
                     break;
                 // case $C.GAME.PLAYER.TURN.SURVIVED:
                 //     message = user.name + " sobreviveu ao seu turno.";

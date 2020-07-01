@@ -503,7 +503,7 @@ module.exports = function (io, EK) {
                             state = $.GAME.PLAYER.TURN.PREVENTED;
                         } else {
                             //Player exploded
-                            state = $.GAME.PLAYER.TURN.INFECTED;
+                            state = $.GAME.PLAYER.TURN.CONTAMINED;
                             game.explodePlayer(player);
                         }
                     }

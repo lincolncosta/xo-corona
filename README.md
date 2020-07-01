@@ -74,8 +74,8 @@ outro jogador), e sim a QUAISQUER cartas de mesmo nome (um par de Cartas de Emba
 
 ### COLABORADORES
 
-| [<img src="https://avatars0.githubusercontent.com/u/26147019?s=460&v=4" width=115><br><sub>@tekpixo</sub>](https://github.com/tekpixo) | [<img src="https://avatars2.githubusercontent.com/u/39711165?s=460&v=4" width=115><br><sub>@saravendramini</sub>](https://github.com/saravendramini) | [<img src="https://avatars0.githubusercontent.com/u/1071794?s=460&v=4" width=115><br><sub>@tadeu28</sub>](https://github.com/tadeu28) | [<img src="https://avatars3.githubusercontent.com/u/30736507?s=460&v=4" width=115><br><sub>@HuntedSouls</sub>](https://github.com/HuntedSouls) |
-| :---: | :---: | :---: | :---: |
+| [<img src="https://avatars0.githubusercontent.com/u/26147019?s=460&v=4" width=115><br><sub>Lincoln Costa</sub>](https://github.com/tekpixo) | [<img src="https://avatars3.githubusercontent.com/u/30736507?s=460&v=4" width=115><br><sub>Joshua Kritz</sub>](https://github.com/HuntedSouls) | [<img src="https://avatars0.githubusercontent.com/u/1071794?s=460&v=4" width=115><br><sub>Tadeu Classe</sub>](https://github.com/tadeu28) | 
+| :---: | :---: | :---: |
 
 ----
 

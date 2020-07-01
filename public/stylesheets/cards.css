@@ -130,7 +130,7 @@
     text-align: center;
     padding: 5px 10px;
     border-radius: 6px;
-    bottom: 25rem;
+    position: fixed;
     position: absolute;
     z-index: 1;
     white-space: normal;

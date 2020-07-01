@@ -911,6 +911,18 @@ jQuery(document).ready(function ($) {
         }
     })
 
+    io.on($C.GAME.PLAYER.TURN.CONTAMINED, function (data) {
+        var user = data.player.user;
+        var hasFakeNewsInHand = main.gameData.hasCardTypeInHand($C.CARD.FAKENEWS);
+
+        if (hasFakeNewsInHand) {
+            message = user.name + " foi contaminado enquanto tinha uma Fake News em mãos. Notícias falsas não te manterão seguro!";
+        } else {
+            message = user.name + " foi contaminado!";
+        }
+
+        GameRoom.logSystemBlue(message);
+    })
     /**
      * Start an x second timer on the nope button
      * @param {Number} time The time in milliseconds

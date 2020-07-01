@@ -505,6 +505,7 @@ module.exports = function (io, EK) {
                             //Player exploded
                             state = $.GAME.PLAYER.TURN.CONTAMINED;
                             game.explodePlayer(player);
+                            io.emit($.GAME.PLAYER.TURN.CONTAMINED, {player});
                         }
                     }
 

@@ -220,7 +220,7 @@ Game.prototype.start = function () {
     //Add in bombs
     for (var i = 0; i < this.players.length - 1; i++) {
         this.drawPile.push(new Card(this.generateRandomID(), 'Contaminação', $.CARD.INFECTION, this.generateRandomBetween(1, 4), 'Infectará o jogador que encontrar a carta a menos que o mesmo possua uma carta de Prevenção.'));
-        this.drawPile.push(new Card(this.generateRandomID(), 'Troca-tudo', $.CARD.CHANGE, this.generateRandomBetween(22, 22), ''));
+        this.drawPile.push(new Card(this.generateRandomID(), 'Troca-tudo', $.CARD.CHANGE, this.generateRandomBetween(22, 22), 'CUIDADO! Essa carta faz com que você troque todas as suas cartas por todas as cartas de um adversário.'));
     }
 
     //Add in extra defuses to negate the lack of nopes

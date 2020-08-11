@@ -54,7 +54,7 @@ jQuery(document).ready(function ($) {
 
     $("#newGameButton").bind('click touchstart', function (e) {
         e.preventDefault();
-        var name = prompt("Digite um título:", "PESC");
+        var name = prompt("Digite um título:", "Sala de " + main.getCurrentUser().name);
         if (name) {
             io.emit($C.GAME.CREATE, { title: name });
         }

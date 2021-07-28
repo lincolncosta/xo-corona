@@ -32,20 +32,11 @@
     <script src="javascript/game/EK.js"></script>
     <script src="javascript/game/rooms.js"></script>
     <script src="javascript/game/logic.js"></script>
-
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FVL30YBZXL"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-FVL30YBZXL');
-    </script>
 </head>
 
 <body>
     <div class="container-fluid">
+        <!-- TELA DE LOGIN -->
         <div id="login" class="room">
             <div class="center text-center" id="loginInput">
                 <div class="center">
@@ -58,6 +49,7 @@
                 </div>
             </div>
         </div>
+        <!-- TELA DE ESPERA/LOBBY -->
         <div id="lobby" class="room">
             <div id="gameList" class="col-md-10 col-sm-8 col-xs-12">
                 <div class="top-bar text-center">
@@ -89,7 +81,7 @@
                 <div class="content scrollable"></div>
             </div>
         </div>
-
+        <!-- TELA DE JOGO -->
         <div id="game" class="room">
             <div id="leave">
                 <div id="leaveButton" class="btn btn-danger">X</div>

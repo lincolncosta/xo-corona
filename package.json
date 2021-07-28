@@ -8,8 +8,8 @@
     "npm": "6.13.4"
   },
   "dependencies": {
-    "debug": "~4.1.1",
-    "express": "^4.17.1",
+    "debug": "latest",
+    "express": "latest",
     "socket.io": "latest"
   },
   "scripts": {

@@ -51,7 +51,7 @@ server.on('listening', onListening);
 /**
  * Setup game and logic
  */
-var io = require('socket.io').listen(server);
+var io = require('socket.io')(server, {allowEIO3: true});
 var game = new EK(io);
 var logic = new Logic(io, game);
 
